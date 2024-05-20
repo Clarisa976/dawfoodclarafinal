@@ -37,7 +37,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jBtnAdmin = new javax.swing.JButton();
+        jBtnAgregar = new javax.swing.JButton();
         jBtnVolver = new javax.swing.JButton();
         jBtnModificar = new javax.swing.JButton();
         jBtnBorrar = new javax.swing.JButton();
@@ -45,6 +45,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
+        setResizable(false);
         setTitle("Wok & Roll - Gestionar productos");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -54,13 +55,13 @@ public class VentanaAdministrador extends java.awt.Dialog {
 
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
 
-        jBtnAdmin.setBackground(new java.awt.Color(204, 255, 204));
-        jBtnAdmin.setForeground(new java.awt.Color(0, 0, 0));
-        jBtnAdmin.setText("AGREGAR");
-        jBtnAdmin.setToolTipText("Agregar un producto nuevo");
-        jBtnAdmin.addActionListener(new java.awt.event.ActionListener() {
+        jBtnAgregar.setBackground(new java.awt.Color(204, 255, 204));
+        jBtnAgregar.setForeground(new java.awt.Color(0, 0, 0));
+        jBtnAgregar.setText("AGREGAR");
+        jBtnAgregar.setToolTipText("Agregar un producto nuevo");
+        jBtnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnAdminActionPerformed(evt);
+                jBtnAgregarActionPerformed(evt);
             }
         });
 
@@ -124,12 +125,12 @@ public class VentanaAdministrador extends java.awt.Dialog {
                             .addComponent(jBtnVolver, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBtnBorrar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBtnModificar, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jBtnAdmin, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(jBtnAgregar, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addComponent(jLabel1))
-                .addContainerGap(635, Short.MAX_VALUE))
+                .addContainerGap(71, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnAdmin, jBtnBorrar, jBtnModificar, jBtnVolver});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnAgregar, jBtnBorrar, jBtnModificar, jBtnVolver});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,7 +138,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(111, 111, 111)
-                        .addComponent(jBtnAdmin)
+                        .addComponent(jBtnAgregar)
                         .addGap(18, 18, 18)
                         .addComponent(jBtnModificar)
                         .addGap(18, 18, 18)
@@ -149,14 +150,14 @@ public class VentanaAdministrador extends java.awt.Dialog {
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(272, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -181,11 +182,11 @@ public class VentanaAdministrador extends java.awt.Dialog {
 
     }//GEN-LAST:event_jBtnModificarActionPerformed
 
-    private void jBtnAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAdminActionPerformed
+    private void jBtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAgregarActionPerformed
         // TODO add your handling code here:
+        new VentanaAgregar(panelMain, true).setVisible(true);
 
-
-    }//GEN-LAST:event_jBtnAdminActionPerformed
+    }//GEN-LAST:event_jBtnAgregarActionPerformed
 
     private void jBtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVolverActionPerformed
         // TODO add your handling code here:
@@ -248,7 +249,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jBtnAdmin;
+    private javax.swing.JButton jBtnAgregar;
     private javax.swing.JButton jBtnBorrar;
     private javax.swing.JButton jBtnModificar;
     private javax.swing.JButton jBtnVolver;

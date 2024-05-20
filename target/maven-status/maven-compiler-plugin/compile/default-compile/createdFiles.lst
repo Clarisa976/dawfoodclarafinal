@@ -1,7 +1,9 @@
+views\VentanaAgregar$5.class
 views\VentanaAdmin$1.class
 views\VentanaAdministrador$4.class
 controllers\exceptions\IllegalOrphanException.class
 views\VentanaAdministrador$1.class
+views\VentanaAgregar$2.class
 models\Tpv.class
 views\PanelPrincipal$3.class
 models\DetalleticketsPK.class
@@ -11,9 +13,11 @@ models\Detalletickets.class
 controllers\DetalleticketsJpaController.class
 controllers\TpvJpaController.class
 views\PanelPrincipal$4.class
+views\VentanaAgregar.class
 controllers\TicketsJpaController.class
 models\Tipoproducto.class
 views\VentanaAdmin$2.class
+views\VentanaAgregar$4.class
 models\ModeloTablaProductos.class
 views\VentanaAdministrador$5.class
 controllers\exceptions\NonexistentEntityException.class
@@ -25,7 +29,9 @@ views\PanelPrincipal$1.class
 views\VentanaAdministrador.class
 views\PanelPrincipal$2.class
 views\VentanaAdmin$3.class
+views\VentanaAgregar$1.class
 controllers\ProductosJpaController.class
 daw\Dawfoodclarafinal.class
+views\VentanaAgregar$3.class
 views\VentanaAdministrador$2.class
 controllers\TipoproductoJpaController.class
