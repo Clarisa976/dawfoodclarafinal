@@ -16,6 +16,7 @@
 /home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/views/VentanaConsultaVentas.java
 /home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/controllers/TicketsJpaController.java
 /home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/controllers/exceptions/PreexistingEntityException.java
+/home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/views/VentanaDetallesTicket.java
 /home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/models/Tickets.java
 /home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/controllers/TipoproductoJpaController.java
 /home/clara/NetBeansProjects/dawfoodclarafinal/src/main/java/controllers/exceptions/IllegalOrphanException.java

@@ -8,9 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import models.ModeloTablaProductos;
 import models.ModeloTablaTickets;
-import models.Productos;
 import models.Tickets;
 
 /**
@@ -45,6 +43,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         jBtnComprobar = new javax.swing.JButton();
         jBtnVolver = new javax.swing.JButton();
 
+        setResizable(false);
         setTitle("Wok & Roll - Consulta de ventas");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -55,6 +54,8 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
+        jTable1.setBackground(new java.awt.Color(51, 51, 51));
+        jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -66,12 +67,19 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setGridColor(new java.awt.Color(102, 102, 102));
+        jTable1.setSelectionForeground(new java.awt.Color(51, 51, 51));
         jScrollPane1.setViewportView(jTable1);
 
         jBtnComprobar.setBackground(new java.awt.Color(204, 255, 204));
         jBtnComprobar.setForeground(new java.awt.Color(0, 0, 0));
         jBtnComprobar.setText("COMPROBAR");
         jBtnComprobar.setToolTipText("Ver en detalle el ticket seleccionado");
+        jBtnComprobar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnComprobarActionPerformed(evt);
+            }
+        });
 
         jBtnVolver.setBackground(new java.awt.Color(204, 255, 204));
         jBtnVolver.setForeground(new java.awt.Color(0, 0, 0));
@@ -188,6 +196,11 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jBtnVolverActionPerformed
+
+    private void jBtnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnComprobarActionPerformed
+        // TODO add your handling code here:
+        new VentanaDetallesTicket(panelMain, true).setVisible(true);
+    }//GEN-LAST:event_jBtnComprobarActionPerformed
 
    
 
