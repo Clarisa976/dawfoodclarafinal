@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
 import models.ModeloTablaProductos;
 import models.Productos;
 
@@ -20,12 +21,14 @@ public class VentanaAdministrador extends java.awt.Dialog {
     /**
      * Creates new form VentanaAdministrador
      */
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     PanelPrincipal panelMain;
 
     public VentanaAdministrador(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
         cargarDatosJTable();
+        setLocationRelativeTo(panelMain);
     }
 
     /**
@@ -179,12 +182,26 @@ public class VentanaAdministrador extends java.awt.Dialog {
 
     private void jBtnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnModificarActionPerformed
         // TODO add your handling code here:
-
+        if (jTable1.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "No has seleccionado ningún registro");
+        } else {
+            //modificamos el producto seleccionado
+            //primero obtenemos el id del producto seleccionado
+            int selectedRow = jTable1.getSelectedRow();
+            Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
+            new VentanaModificar(panelMain, true, idProducto).setVisible(true);
+            // Una vez termine la ejecución de la ventana Agregar
+            // Llamo a cargar de nuevo los datos en el jTable con los cambios
+            cargarDatosJTable();
+        }
     }//GEN-LAST:event_jBtnModificarActionPerformed
 
     private void jBtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAgregarActionPerformed
         // TODO add your handling code here:
         new VentanaAgregar(panelMain, true).setVisible(true);
+        // Una vez termine la ejecución de la ventana Agregar
+        // Llamo a cargar de nuevo los datos en el jTable con los cambios
+        cargarDatosJTable();
 
     }//GEN-LAST:event_jBtnAgregarActionPerformed
 
@@ -195,9 +212,53 @@ public class VentanaAdministrador extends java.awt.Dialog {
 
     private void jBtnBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnBorrarActionPerformed
         // TODO add your handling code here:
+        if (jTable1.getSelectedRow() < 0) {
+            JOptionPane.showMessageDialog(null, "No has seleccionado ningún registro");
+        } else {
+            //borramos el producto seleccionado
+            //primero obtenemos el id del producto seleccionado
+            int selectedRow = jTable1.getSelectedRow();
+            Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
+
+            EntityManager em = emf.createEntityManager();
+            try {
+                //verificamos si el producto está o no en un ticket
+                boolean productoEnTicket = em.createQuery("SELECT COUNT(d) FROM Detalletickets d WHERE d.detalleticketsPK.idProducto = :idProducto", Long.class)
+                        .setParameter("idProducto", idProducto)
+                        .getSingleResult() > 0;
+                //si está no se borra
+                if (productoEnTicket) {
+                    JOptionPane.showMessageDialog(null, "El producto no puede ser borrado porque está presente en un ticket.");
+                } else {
+                    //sino está lo eliminamos
+                    em.getTransaction().begin();
+                    Productos producto = em.find(Productos.class, idProducto);
+                    if (producto != null) {
+                        em.remove(producto);
+                        em.getTransaction().commit();
+                        JOptionPane.showMessageDialog(null, "Producto borrado exitosamente.");
+                    } else {
+                        JOptionPane.showMessageDialog(null, "El producto seleccionado no existe.");
+                    }
+                    // Una vez termine la ejecución
+                    // Llamo a cargar de nuevo los datos en el jTable con los cambios
+                    cargarDatosJTable();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+                JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar borrar el producto.");
+            } finally {
+                em.close();
+                emf.close();
+            }
+
+        }
     }//GEN-LAST:event_jBtnBorrarActionPerformed
 
-    // Este método inserta los datos de la lista en el jtable
+// Este método inserta los datos de la lista en el jtable
     private void cargarDatosJTable() {
 
         // Se crea el modelo de datos que contendrá el JTable
@@ -207,40 +268,41 @@ public class VentanaAdministrador extends java.awt.Dialog {
         // Array de object con el número de columnas del jtable
         // Para guardar cada campo de cada Persona de la lista
         Object[] fila = new Object[modelo.getColumnCount()];
-        
+
         //obtenemos los datos de la base de datos
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
         EntityManager em = emf.createEntityManager();
 
         try {
-        List<Productos> productosList = em.createNamedQuery("Productos.findAll", Productos.class).getResultList();
-        
-        // Depuración: verificar si se obtuvieron productos
-        if (productosList.isEmpty()) {
-            System.out.println("No se encontraron productos en la base de datos.");
-        } else {
-            System.out.println("Número de productos encontrados: " + productosList.size());
-        }
-        
-        // Añadir los datos al modelo de la tabla
-        for (Productos producto : productosList) {
+            List<Productos> productosList = em.createNamedQuery("Productos.findAll", Productos.class
+            ).getResultList();
+
+            // Depuración: verificar si se obtuvieron productos
+            if (productosList.isEmpty()) {
+                System.out.println("No se encontraron productos en la base de datos.");
+            } else {
+                System.out.println("Número de productos encontrados: " + productosList.size());
+            }
+
+            // Añadir los datos al modelo de la tabla
+            for (Productos producto : productosList) {
 //            Object[] fila = new Object[6];
-            fila[0] = producto.getIdProducto();
-            fila[1] = producto.getNombre();
-            fila[2] = producto.getPrecioSinIVA();
-            fila[3] = producto.getTipoIVA();
-            fila[4] = producto.getStock();
-            fila[5] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getIdTipoProducto() : null;
-            
-            modelo.addRow(fila);
+                fila[0] = producto.getIdProducto();
+                fila[1] = producto.getNombre();
+                fila[2] = producto.getPrecioSinIVA();
+                fila[3] = producto.getTipoIVA();
+                fila[4] = producto.getStock();
+                fila[5] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getIdTipoProducto() : null;
+
+                modelo.addRow(fila);
+            }
+        } catch (Exception e) {
+            // Depuración: imprimir la pila de errores si ocurre una excepción
+            e.printStackTrace();
+        } finally {
+            em.close();
+            emf.close();
         }
-    } catch (Exception e) {
-        // Depuración: imprimir la pila de errores si ocurre una excepción
-        e.printStackTrace();
-    } finally {
-        em.close();
-        emf.close();
-    }
 
         // Decimos al JTable el modelo a usar
         jTable1.setModel(modelo);

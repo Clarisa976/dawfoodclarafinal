@@ -9,7 +9,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
-    <Property name="title" type="java.lang.String" value="Wok &amp; Roll - Agregar producto"/>
+    <Property name="title" type="java.lang.String" value="Wok &amp; Roll - Modificar producto"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -204,7 +204,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Tipo de IVA*"/>
+            <Property name="text" type="java.lang.String" value="Tipo de IVA*:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelStock">
@@ -212,7 +212,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Stock:"/>
+            <Property name="text" type="java.lang.String" value="Stock*:"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabelTipoProducto">
