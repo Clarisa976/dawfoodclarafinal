@@ -123,14 +123,14 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1034, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addGap(55, 55, 55)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jBtnVolver, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBtnBorrar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBtnModificar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jBtnAgregar, javax.swing.GroupLayout.Alignment.TRAILING)))
                     .addComponent(jLabel1))
-                .addContainerGap(71, Short.MAX_VALUE))
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnAgregar, jBtnBorrar, jBtnModificar, jBtnVolver});
@@ -138,21 +138,20 @@ public class VentanaAdministrador extends java.awt.Dialog {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addComponent(jBtnAgregar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtnModificar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtnBorrar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtnVolver))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel1)
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBtnAgregar)
+                .addGap(18, 18, 18)
+                .addComponent(jBtnModificar)
+                .addGap(18, 18, 18)
+                .addComponent(jBtnBorrar)
+                .addGap(18, 18, 18)
+                .addComponent(jBtnVolver)
+                .addGap(179, 179, 179))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -189,10 +188,32 @@ public class VentanaAdministrador extends java.awt.Dialog {
             //primero obtenemos el id del producto seleccionado
             int selectedRow = jTable1.getSelectedRow();
             Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
-            new VentanaModificar(panelMain, true, idProducto).setVisible(true);
-            // Una vez termine la ejecución de la ventana Agregar
-            // Llamo a cargar de nuevo los datos en el jTable con los cambios
-            cargarDatosJTable();
+            EntityManager em = emf.createEntityManager();
+            try {
+                //verificamos si el producto está o no en un ticket
+                boolean productoEnTicket = em.createQuery("SELECT COUNT(d) FROM Detalletickets d WHERE d.detalleticketsPK.idProducto = :idProducto", Long.class)
+                        .setParameter("idProducto", idProducto)
+                        .getSingleResult() > 0;
+                //si está no se borra
+                if (productoEnTicket) {
+                    JOptionPane.showMessageDialog(null, "El producto no puede ser modificado porque está presente en un ticket.");
+                } else {
+                    new VentanaModificar(panelMain, true, idProducto).setVisible(true);
+                }
+                // Una vez termine la ejecución de la ventana Agregar
+                // Llamo a cargar de nuevo los datos en el jTable con los cambios
+                cargarDatosJTable();
+            } catch (Exception e) {
+                e.printStackTrace();
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().rollback();
+                }
+                JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar modificar el producto.");
+            } finally {
+                em.close();
+                //si lo cerramos peta
+//                emf.close();
+            }
         }
     }//GEN-LAST:event_jBtnModificarActionPerformed
 
@@ -259,7 +280,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
         }
     }//GEN-LAST:event_jBtnBorrarActionPerformed
 
-// Este método inserta los datos de la lista en el jtable
+    // Este método inserta los datos de la lista en el jtable
     private void cargarDatosJTable() {
 
         // Se crea el modelo de datos que contendrá el JTable
@@ -286,7 +307,6 @@ public class VentanaAdministrador extends java.awt.Dialog {
 
             // Añadir los datos al modelo de la tabla
             for (Productos producto : productosList) {
-//            Object[] fila = new Object[6];
                 fila[0] = producto.getIdProducto();
                 fila[1] = producto.getNombre();
                 fila[2] = producto.getPrecioSinIVA();

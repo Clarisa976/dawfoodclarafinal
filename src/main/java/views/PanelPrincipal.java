@@ -78,7 +78,7 @@ public class PanelPrincipal extends javax.swing.JFrame {
             }
         });
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("/home/clara/NetBeansProjects/dawfoodclarafinal/imagen/logo_Wok-and-roll.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo_Wok-and-roll.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -91,16 +91,15 @@ public class PanelPrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jBtnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                        .addComponent(jBtnGestionar)
-                        .addGap(26, 26, 26)
-                        .addComponent(jBtnConsultarTickets)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jBtnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                                .addComponent(jBtnGestionar)
+                                .addGap(26, 26, 26)
+                                .addComponent(jBtnConsultarTickets)))
                         .addGap(28, 28, 28))))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(56, 56, 56)
-                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnComprar, jBtnConsultarTickets, jBtnGestionar});
@@ -144,12 +143,12 @@ public class PanelPrincipal extends javax.swing.JFrame {
 
     private void jBtnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnComprarActionPerformed
         // TODO add your handling code here:
-//        new VentanaCliente(this, true).setVisible(true);
+
     }//GEN-LAST:event_jBtnComprarActionPerformed
 
     private void jBtnConsultarTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConsultarTicketsActionPerformed
         // TODO add your handling code here:
-        dispose();
+        new VentanaConsultaVentas(this, true).setVisible(true);
     }//GEN-LAST:event_jBtnConsultarTicketsActionPerformed
 
     /**

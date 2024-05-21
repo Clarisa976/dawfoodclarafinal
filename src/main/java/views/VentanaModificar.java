@@ -20,13 +20,13 @@ import models.Tipoproducto;
  */
 public class VentanaModificar extends javax.swing.JDialog {
 
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
 
     /**
      * Creates new form VentanaAgregar
      */
     private PanelPrincipal panelMain;
-    private Integer idProducto;
+    private final Integer idProducto;
 
     public VentanaModificar(PanelPrincipal parent, boolean modal, Integer idProducto) {
         super(parent, modal);
