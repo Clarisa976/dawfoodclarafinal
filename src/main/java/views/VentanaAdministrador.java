@@ -252,7 +252,8 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar borrar el producto.");
             } finally {
                 em.close();
-                emf.close();
+                //si lo cerramos peta
+//                emf.close();
             }
 
         }
@@ -270,7 +271,6 @@ public class VentanaAdministrador extends java.awt.Dialog {
         Object[] fila = new Object[modelo.getColumnCount()];
 
         //obtenemos los datos de la base de datos
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
         EntityManager em = emf.createEntityManager();
 
         try {
@@ -301,7 +301,8 @@ public class VentanaAdministrador extends java.awt.Dialog {
             e.printStackTrace();
         } finally {
             em.close();
-            emf.close();
+            //si lo cerramos peta
+//            emf.close();
         }
 
         // Decimos al JTable el modelo a usar
