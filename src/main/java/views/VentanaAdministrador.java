@@ -312,7 +312,8 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 fila[2] = producto.getPrecioSinIVA();
                 fila[3] = producto.getTipoIVA();
                 fila[4] = producto.getStock();
-                fila[5] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getIdTipoProducto() : null;
+                //mostramos el nombre del tipoProducto no un número feo
+                fila[5] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getNomTipoProducto() : null;
 
                 modelo.addRow(fila);
             }

@@ -338,17 +338,14 @@ public class VentanaMenu extends javax.swing.JDialog {
                     .setParameter("nomCategoria", categoria)
                     .getResultList();
 
-            // Depuración: verificar si se obtuvieron productos
-//            if (productosList.isEmpty()) {
-//                System.out.println("No se encontraron productos en la base de datos.");
-//            } else {
-//                System.out.println("Número de productos encontrados: " + productosList.size());
-//            }
+
             for (Productos producto : productosList) {
                 fila[0] = producto.getNombre();
-                fila[1] = producto.getPrecioSinIVA();
-                fila[2] = producto.getTipoIVA();
-                fila[3] = calcularPrecioConIVA(producto.getPrecioSinIVA(), producto.getTipoIVA());
+                //añadimos el nombre del tipo de producto
+                fila[1] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getNomTipoProducto() : null;
+                fila[2] = producto.getPrecioSinIVA();
+                fila[3] = producto.getTipoIVA();
+                fila[4] = calcularPrecioConIVA(producto.getPrecioSinIVA(), producto.getTipoIVA());
 
                 modelo.addRow(fila);
             }
@@ -372,14 +369,14 @@ public class VentanaMenu extends javax.swing.JDialog {
 
     //método para calcular el precio con iva
     private BigDecimal calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
-    BigDecimal iva;
-    if ("IVA_DIEZ".equals(tipoIVA)) {
-        iva = new BigDecimal("0.10");
-    } else {
-        iva = new BigDecimal("0.21");
+        BigDecimal iva;
+        if ("IVA_DIEZ".equals(tipoIVA)) {
+            iva = new BigDecimal("0.10");
+        } else {
+            iva = new BigDecimal("0.21");
+        }
+        return precioSinIVA.add(precioSinIVA.multiply(iva)).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
-    return precioSinIVA.add(precioSinIVA.multiply(iva)).setScale(2, BigDecimal.ROUND_HALF_UP);
-}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

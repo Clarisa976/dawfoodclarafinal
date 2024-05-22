@@ -18,7 +18,7 @@ public class ModeloTablaProductosFiltrada extends DefaultTableModel {
     public ModeloTablaProductosFiltrada() {
         // Se asignan los nombres de las columnas de la tabla
         // en función de los atributos que tiene la persona
-        String[] columnNames = {"NOMBRE", "PRECIO SIN IVA",
+        String[] columnNames = {"NOMBRE","TIPO PRODUCTO", "PRECIO SIN IVA",
             "TIPO DE IVA", "PRECIO CON IVA"};
 
         // Se le indica al modelo el nombre de las columnas y cantidad
