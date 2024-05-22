@@ -301,13 +301,13 @@ public class VentanaMenu extends javax.swing.JDialog {
                 String precioConIVAStr = String.format("%.2f", precioConIVA.multiply(new BigDecimal(cantidad)));
 
                 //lo ponemos bonico para añadirlo al JList del carrito
-                String tmp = String.format("%s - Cantidad: %d - Precio: %s", 
-                        nombreProducto, cantidad, 
+                String tmp = String.format("%s - Cantidad: %d - Precio: %s",
+                        nombreProducto, cantidad,
                         precioConIVA.multiply(new BigDecimal(cantidad)).toString());
 
                 //llamamos al jdialog del carrito y agrergamos el string anterior
                 VentanaCarrito.agregarProducto(tmp);
-                
+
             }
         } else {
             JOptionPane.showMessageDialog(null, "No has seleccionado ningún producto.");
@@ -371,14 +371,15 @@ public class VentanaMenu extends javax.swing.JDialog {
     }
 
     //método para calcular el precio con iva
-    private BigDecimal calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
+    private String calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
         BigDecimal iva;
         if ("IVA_DIEZ".equals(tipoIVA)) {
             iva = new BigDecimal("0.10");
         } else {
-            iva = new BigDecimal("0.21");       
+            iva = new BigDecimal("0.21");
         }
-        return precioSinIVA.add(precioSinIVA.multiply(iva));
+        BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(iva));
+        return String.format("%.2f", precioConIVA);
     }
 
 
