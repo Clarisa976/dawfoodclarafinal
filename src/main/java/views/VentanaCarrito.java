@@ -4,6 +4,7 @@
  */
 package views;
 
+import java.util.HashMap;
 import javax.swing.DefaultListModel;
 
 /**
@@ -15,8 +16,10 @@ public class VentanaCarrito extends javax.swing.JDialog {
     /**
      * Creates new form VentanaCarrito
      */
-    private static DefaultListModel<String> listModel= new DefaultListModel<>();
+    private static DefaultListModel<String> listModel = new DefaultListModel<>();
+    private static HashMap<String, Integer> productosCarrito = new HashMap<>();
     private PanelPrincipal panelMain;
+
     public VentanaCarrito(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -115,14 +118,13 @@ public class VentanaCarrito extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     public static void agregarProducto(String producto) {
-       listModel.addElement(producto);
+        listModel.addElement(producto);
     }
     private void jBtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVolverActionPerformed
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jBtnVolverActionPerformed
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnPagar;
