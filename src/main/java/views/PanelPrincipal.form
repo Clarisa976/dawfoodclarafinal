@@ -60,10 +60,10 @@
                               <Component id="jLabel2" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="1" attributes="0">
                                   <Component id="jBtnComprar" linkSize="1" min="-2" pref="165" max="-2" attributes="0"/>
-                                  <EmptySpace pref="26" max="32767" attributes="0"/>
-                                  <Component id="jBtnGestionar" linkSize="1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
-                                  <Component id="jBtnConsultarTickets" linkSize="1" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="32767" attributes="0"/>
+                                  <Component id="jBtnGestionar" min="-2" pref="178" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                                  <Component id="jBtnConsultarTickets" linkSize="1" min="-2" pref="165" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
@@ -83,7 +83,7 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jBtnGestionar" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jBtnComprar" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jBtnConsultarTickets" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBtnConsultarTickets" linkSize="2" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               </Group>

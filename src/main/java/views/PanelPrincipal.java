@@ -95,14 +95,14 @@ public class PanelPrincipal extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jBtnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                                .addComponent(jBtnGestionar)
-                                .addGap(26, 26, 26)
-                                .addComponent(jBtnConsultarTickets)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBtnGestionar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45)
+                                .addComponent(jBtnConsultarTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(28, 28, 28))))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnComprar, jBtnConsultarTickets, jBtnGestionar});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnComprar, jBtnConsultarTickets});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -119,7 +119,7 @@ public class PanelPrincipal extends javax.swing.JFrame {
                 .addGap(25, 25, 25))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBtnComprar, jBtnGestionar});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBtnComprar, jBtnConsultarTickets, jBtnGestionar});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -143,7 +143,7 @@ public class PanelPrincipal extends javax.swing.JFrame {
 
     private void jBtnComprarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnComprarActionPerformed
         // TODO add your handling code here:
-
+        new VentanaCompras(this, true).setVisible(true);
     }//GEN-LAST:event_jBtnComprarActionPerformed
 
     private void jBtnConsultarTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConsultarTicketsActionPerformed

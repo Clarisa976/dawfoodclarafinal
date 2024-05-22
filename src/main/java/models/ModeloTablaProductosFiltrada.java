@@ -11,15 +11,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author clara
  */
-public class ModeloTablaTickets extends DefaultTableModel {
+public class ModeloTablaProductosFiltrada extends DefaultTableModel {
     // Para usar JTable hay que asociar al JTable un objeto de tipo 
     // DefaultTableModel que contenga las columnas correspondientes
 
-    public ModeloTablaTickets() {
+    public ModeloTablaProductosFiltrada() {
         // Se asignan los nombres de las columnas de la tabla
         // en función de los atributos que tiene la persona
-        String[] columnNames = {"ID TICKET", "ID TPV", "Nº PEDIDO",
-            "Nº TRANSACCIÓN", "FECHA", "HORA","IMPORTE TOTAL"};
+        String[] columnNames = {"NOMBRE", "PRECIO SIN IVA",
+            "TIPO DE IVA", "PRECIO CON IVA"};
 
         // Se le indica al modelo el nombre de las columnas y cantidad
         this.setColumnIdentifiers(columnNames);
@@ -33,18 +33,15 @@ public class ModeloTablaTickets extends DefaultTableModel {
         // En nuestro caso ninguna celda se edita
         return false;
     }
-    //si no sobreeescribimos la fecha, hora y el importe luego peta si queremos
-    //cambiar el formato
      @Override
+    //si no lo sobreescribimos puede petar luego a la hora de hacerlo string 
     public Class<?> getColumnClass(int columnIndex) {
         switch (columnIndex) {
-            case 4: // FECHA
-            case 5: // HORA
-                return String.class;
-            case 6: // IMPORTE TOTAL
+            case 1: // PRECIO SIN IVA
+            case 3: // PRECIO CON IVA
                 return BigDecimal.class;
             default:
-                return Integer.class;
+                return String.class;
         }
     }
 }

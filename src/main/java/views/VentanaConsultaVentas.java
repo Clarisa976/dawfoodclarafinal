@@ -4,6 +4,9 @@
  */
 package views;
 
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -164,8 +167,8 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
                 fila[1] = ticket.getIdTicket();
                 fila[2] = ticket.getNumeroPedido();
                 fila[3] = ticket.getCodTransaccion();
-                fila[4] = ticket.getFechaOperacion();
-                fila[5] = ticket.getHoraOperacion();
+                fila[4] = formatearFecha(ticket.getFechaOperacion());
+                fila[5] = formatearHora(ticket.getHoraOperacion()); 
                 fila[6] = ticket.getImporteTotal();
 
 
@@ -184,6 +187,16 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         jTable1.setModel(modelo);
 
     }
+    private static String formatearFecha(Date fecha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(fecha);
+    }
+
+    private static String formatearHora(Date hora) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(hora);
+    }
+    
     /**
      * Closes the dialog
      */
