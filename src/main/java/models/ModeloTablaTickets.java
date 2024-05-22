@@ -33,18 +33,5 @@ public class ModeloTablaTickets extends DefaultTableModel {
         // En nuestro caso ninguna celda se edita
         return false;
     }
-    //si no sobreeescribimos la fecha, hora y el importe luego peta si queremos
-    //cambiar el formato
-     @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        switch (columnIndex) {
-            case 4: // FECHA
-            case 5: // HORA
-                return String.class;
-            case 6: // IMPORTE TOTAL
-                return BigDecimal.class;
-            default:
-                return Integer.class;
-        }
-    }
+
 }

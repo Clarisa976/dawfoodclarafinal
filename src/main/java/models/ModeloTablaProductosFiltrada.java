@@ -33,15 +33,5 @@ public class ModeloTablaProductosFiltrada extends DefaultTableModel {
         // En nuestro caso ninguna celda se edita
         return false;
     }
-     @Override
-    //si no lo sobreescribimos puede petar luego a la hora de hacerlo string 
-    public Class<?> getColumnClass(int columnIndex) {
-        switch (columnIndex) {
-            case 1: // PRECIO SIN IVA
-            case 3: // PRECIO CON IVA
-                return BigDecimal.class;
-            default:
-                return String.class;
-        }
-    }
+
 }

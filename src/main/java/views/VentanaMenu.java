@@ -371,16 +371,15 @@ public class VentanaMenu extends javax.swing.JDialog {
     }
 
     //método para calcular el precio con iva
-    private String calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
-        BigDecimal iva;
-        if ("IVA_DIEZ".equals(tipoIVA)) {
-            iva = new BigDecimal("0.10");
-        } else {
-            iva = new BigDecimal("0.21");
-        }
-        BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(iva));
-        return String.format("%.2f", precioConIVA);
+    private BigDecimal calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
+    BigDecimal iva;
+    if ("IVA_DIEZ".equals(tipoIVA)) {
+        iva = new BigDecimal("0.10");
+    } else {
+        iva = new BigDecimal("0.21");
     }
+    return precioSinIVA.add(precioSinIVA.multiply(iva)).setScale(2, BigDecimal.ROUND_HALF_UP);
+}
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
