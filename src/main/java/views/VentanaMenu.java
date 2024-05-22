@@ -288,14 +288,14 @@ public class VentanaMenu extends javax.swing.JDialog {
 
         //luego comprobamos que haya una fila seleccionada y que la cantidad
         //del jspinner sea mayor a 0
-        if (tablaSeleccionada != null && tablaSeleccionada.getSelectedRow() >= 0) {
+        if (tablaSeleccionada != null && tablaSeleccionada.getSelectedRowCount() == 1) {
             int cantidad = (Integer) jSpinnerCantidad.getValue();
             if (cantidad <= 0) {
                 JOptionPane.showMessageDialog(null, "La cantidad debe ser mayor que 0.");
             } else {
                 int selectedRow = tablaSeleccionada.getSelectedRow();
                 String nombreProducto = (String) tablaSeleccionada.getValueAt(selectedRow, 0);
-                BigDecimal precioConIVA = (BigDecimal) tablaSeleccionada.getValueAt(selectedRow, 3);
+                BigDecimal precioConIVA = (BigDecimal) tablaSeleccionada.getValueAt(selectedRow, 4);
 
                 //lo pasamos a string
                 String precioConIVAStr = String.format("%.2f", precioConIVA.multiply(new BigDecimal(cantidad)));
