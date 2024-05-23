@@ -4,8 +4,12 @@
  */
 package views;
 
+import java.math.BigDecimal;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import models.Detalletickets;
+import models.Productos;
+import models.Tickets;
 
 /**
  *
@@ -18,11 +22,14 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
      */
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private PanelPrincipal panelMain;
-    public VentanaDetallesTicket(PanelPrincipal parent, boolean modal) {
+    private Tickets ticket;
+
+    public VentanaDetallesTicket(PanelPrincipal parent, boolean modal, Tickets ticket) {
         super(parent, modal);
         initComponents();
+        this.ticket = ticket;
         //cargar los datos del ticket
-        
+        mostrarDatosTicket();
         setLocationRelativeTo(panelMain);
     }
 
@@ -106,6 +113,52 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
     /**
      * Closes the dialog
      */
+    //método para cargar los datos del ticket
+    private void mostrarDatosTicket() {
+        String detalles = "";
+        detalles += "================================\n";
+        detalles += "          TICKET DE COMPRA       \n";
+        detalles += "            Wok and Roll         \n";
+        detalles += "================================\n";
+        detalles += "ID del Pedido: " + ticket.getIdTicket() + "\n";
+        detalles += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
+        detalles += "Fecha de Emisión: " + ticket.getFechaOperacion().toString() + " " + ticket.getHoraOperacion().toString() + "\n";
+        detalles += "================================\n";
+        detalles += "Productos:\n";
+
+        BigDecimal totalSinIVA = BigDecimal.ZERO;
+        BigDecimal totalConIVA = BigDecimal.ZERO;
+
+        for (Detalletickets detalle : ticket.getDetalleticketsCollection()) {
+            Productos producto = detalle.getProductos();
+            BigDecimal precioSinIVA = producto.getPrecioSinIVA();
+            BigDecimal tipoIVA = calcularTipoIVA(producto.getTipoIVA());
+            BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(tipoIVA));
+            detalles += "- " + producto.getNombre()
+                    + " x " + detalle.getCantidadProducto()
+                    + " - " + String.format("%.2f", precioConIVA) + "€\n";
+            totalSinIVA = totalSinIVA.add(precioSinIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
+            totalConIVA = totalConIVA.add(precioConIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
+        }
+
+        detalles += "================================\n";
+        detalles += "Importe Total sin IVA: " + totalSinIVA + "€\n";
+        detalles += "Importe Total con IVA: " + totalConIVA + "€\n";
+        detalles += "================================\n";
+
+        jtaDetallesTicket.setText(detalles);
+    }
+
+    private BigDecimal calcularTipoIVA(String tipoIVA) {
+        switch (tipoIVA) {
+            case "IVA_DIEZ":
+                return new BigDecimal("0.10");
+            case "IVA_VEINTIUNO":
+                return new BigDecimal("0.21");
+            default:
+                return BigDecimal.ZERO;
+        }
+    }
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         setVisible(false);
         dispose();
@@ -115,8 +168,6 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jBtnVolverActionPerformed
-
-  
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

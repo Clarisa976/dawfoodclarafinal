@@ -4,13 +4,14 @@
  */
 package views;
 
-
+import controllers.TicketsJpaController;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.swing.JOptionPane;
 import models.ModeloTablaTickets;
 import models.Tickets;
 
@@ -24,7 +25,9 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
      * Creates new form VentanaConsultaVentas
      */
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final TicketsJpaController tjc = new TicketsJpaController(emf);
     private PanelPrincipal panelMain;
+
     public VentanaConsultaVentas(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -135,8 +138,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
-     // Este método inserta los datos de la lista en el jtable
+    // Este método inserta los datos de la lista en el jtable
     private void cargarDatosJTable() {
 
         // Se crea el modelo de datos que contendrá el JTable
@@ -168,9 +170,8 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
                 fila[2] = ticket.getNumeroPedido();
                 fila[3] = ticket.getCodTransaccion();
                 fila[4] = formatearFecha(ticket.getFechaOperacion());
-                fila[5] = formatearHora(ticket.getHoraOperacion()); 
+                fila[5] = formatearHora(ticket.getHoraOperacion());
                 fila[6] = ticket.getImporteTotal();
-
 
                 modelo.addRow(fila);
             }
@@ -187,6 +188,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         jTable1.setModel(modelo);
 
     }
+
     private static String formatearFecha(Date fecha) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         return sdf.format(fecha);
@@ -196,7 +198,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
         return sdf.format(hora);
     }
-    
+
     /**
      * Closes the dialog
      */
@@ -212,10 +214,28 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
 
     private void jBtnComprobarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnComprobarActionPerformed
         // TODO add your handling code here:
-        new VentanaDetallesTicket(panelMain, true).setVisible(true);
+        //si hay un campo seleccionado
+        int selectedRow = jTable1.getSelectedRow();
+        if (selectedRow >= 0) {
+            Integer idTicket = (Integer) jTable1.getValueAt(selectedRow, 0);
+
+            EntityManager em = emf.createEntityManager();
+            try {
+                Tickets ticket = tjc.findTickets(idTicket);
+                if (ticket != null) {
+                    new VentanaDetallesTicket(panelMain, true, ticket).setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se encontró el ticket seleccionado.");
+                }
+            } finally {
+                em.close();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un ticket para comprobar.");
+        }
+
     }//GEN-LAST:event_jBtnComprobarActionPerformed
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnComprobar;
