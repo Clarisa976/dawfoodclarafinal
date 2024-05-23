@@ -4,6 +4,7 @@
  */
 package views;
 
+import controllers.ProductosJpaController;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -21,7 +22,8 @@ public class VentanaAdministrador extends java.awt.Dialog {
     /**
      * Creates new form VentanaAdministrador
      */
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final ProductosJpaController pjc = new ProductosJpaController(emf);
     PanelPrincipal panelMain;
 
     public VentanaAdministrador(PanelPrincipal parent, boolean modal) {
@@ -198,17 +200,15 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 if (productoEnTicket) {
                     JOptionPane.showMessageDialog(null, "El producto no puede ser modificado porque está presente en un ticket.");
                 } else {
-                    new VentanaModificar(panelMain, true, idProducto).setVisible(true);
+                   pjc.destroy(idProducto);
+                JOptionPane.showMessageDialog(null, "Producto borrado exitosamente.");
                 }
-                // Una vez termine la ejecución de la ventana Agregar
+                // Una vez termine la ejecución de la ventana
                 // Llamo a cargar de nuevo los datos en el jTable con los cambios
                 cargarDatosJTable();
             } catch (Exception e) {
                 e.printStackTrace();
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().rollback();
-                }
-                JOptionPane.showMessageDialog(null, "Ocurrió un error al intentar modificar el producto.");
+                
             } finally {
                 em.close();
                 //si lo cerramos peta

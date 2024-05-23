@@ -120,6 +120,31 @@ public class VentanaCarrito extends javax.swing.JDialog {
     public static void agregarProducto(String producto) {
         listModel.addElement(producto);
     }
+    /*
+      public static void agregarProducto(String nombreProducto, BigDecimal precioConIVA, int cantidad) {
+        String claveProducto = nombreProducto + " - Precio unitario: " + String.format("%.2f", precioConIVA);
+        
+        if (productosCarrito.containsKey(claveProducto)) {
+            int cantidadActual = productosCarrito.get(claveProducto);
+            int nuevaCantidad = cantidadActual + cantidad;
+            productosCarrito.put(claveProducto, nuevaCantidad);
+            
+            for (int i = 0; i < listModel.size(); i++) {
+                String elemento = listModel.get(i);
+                if (elemento.startsWith(nombreProducto)) {
+                    BigDecimal precioTotal = precioConIVA.multiply(new BigDecimal(nuevaCantidad));
+                    listModel.set(i, String.format("%s - Cantidad: %d - Precio total: %.2f", nombreProducto, nuevaCantidad, precioTotal));
+                    break;
+                }
+            }
+        } else {
+            productosCarrito.put(claveProducto, cantidad);
+            BigDecimal precioTotal = precioConIVA.multiply(new BigDecimal(cantidad));
+            listModel.addElement(String.format("%s - Cantidad: %d - Precio total: %.2f", nombreProducto, cantidad, precioTotal));
+        }
+    }
+    
+    */
     private void jBtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVolverActionPerformed
         // TODO add your handling code here:
         dispose();

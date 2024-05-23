@@ -4,6 +4,7 @@
  */
 package views;
 
+import controllers.ProductosJpaController;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,12 +22,13 @@ import models.Tipoproducto;
 public class VentanaAgregar extends javax.swing.JDialog {
 
     private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    
+    private static ProductosJpaController pjc = new ProductosJpaController(emf);
 
     /**
      * Creates new form VentanaAgregar
      */
     PanelPrincipal panelMain;
+
     public VentanaAgregar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -304,18 +306,18 @@ public class VentanaAgregar extends javax.swing.JDialog {
         // TODO add your handling code here:
         String nombre = jtfNombreProducto.getText().trim();
         String precioStr = jtfPrecioProducto.getText().trim();
-         String tipoIVA = jrbTipoIVA10.isSelected() ? "IVA_DIEZ" : "IVA_VEINTIUNO";
+        String tipoIVA = jrbTipoIVA10.isSelected() ? "IVA_DIEZ" : "IVA_VEINTIUNO";
         Integer stock = (Integer) jSpinnerStock.getValue();
 
         if (nombre.isEmpty() || precioStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                    "Completa todos los campos obligatorios.", 
+            JOptionPane.showMessageDialog(this,
+                    "Completa todos los campos obligatorios.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (stock <= 0) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "El stock debe ser mayor que 0.", "Error",
                     JOptionPane.ERROR_MESSAGE);
             return;
@@ -325,8 +327,8 @@ public class VentanaAgregar extends javax.swing.JDialog {
         try {
             precio = new BigDecimal(precioStr);
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, 
-                    "Introduce un precio válido.", 
+            JOptionPane.showMessageDialog(this,
+                    "Introduce un precio válido.",
                     "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -342,7 +344,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
         }
 
         if (nomTipoProducto == null) {
-            JOptionPane.showMessageDialog(this, 
+            JOptionPane.showMessageDialog(this,
                     "Selecciona un tipo de producto.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -353,7 +355,17 @@ public class VentanaAgregar extends javax.swing.JDialog {
 
             TypedQuery<Tipoproducto> query = em.createNamedQuery("Tipoproducto.findByNomTipoProducto", Tipoproducto.class);
             query.setParameter("nomTipoProducto", nomTipoProducto);
-            Tipoproducto tipoProducto = query.getSingleResult();
+            List<Tipoproducto> tipoProductoList = query.getResultList();
+            
+            if (tipoProductoList.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "No se encontró un tipo de producto con el nombre especificado.",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            em.getTransaction().rollback();
+            return;
+        }
+
+        Tipoproducto tipoProducto = tipoProductoList.get(0);
 
             Productos producto = new Productos();
             producto.setNombre(nombre);
@@ -362,7 +374,8 @@ public class VentanaAgregar extends javax.swing.JDialog {
             producto.setStock(stock);
             producto.setIdTipoProducto(tipoProducto);
 
-            em.persist(producto);
+            pjc.create(producto);
+//            em.persist(producto);
             em.getTransaction().commit();
 
             JOptionPane.showMessageDialog(this, "Producto guardado.");
@@ -371,7 +384,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
             em.getTransaction().rollback();
             e.printStackTrace();
             JOptionPane.showMessageDialog(this,
-                    "Error al guardar el producto: " + e.getMessage(), 
+                    "Error al guardar el producto: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         } finally {
             em.close();
@@ -419,7 +432,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
         jComboBoxBebidas.setEnabled(false);
         jComboBoxPostres.setEnabled(false);
         jCheckBoxBebidas.setSelected(false);
-        jCheckBoxPostres.setSelected(false);        
+        jCheckBoxPostres.setSelected(false);
         jrbTipoIVA10.setEnabled(true);
         jrbTipoIVA21.setEnabled(true);
     }//GEN-LAST:event_jCheckBoxComidasActionPerformed
@@ -434,7 +447,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
         jrbTipoIVA10.setEnabled(true);
         jrbTipoIVA21.setEnabled(true);
         ajustarTipoIVA();
-        
+
     }//GEN-LAST:event_jCheckBoxBebidasActionPerformed
 
     private void jCheckBoxPostresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxPostresActionPerformed
@@ -459,9 +472,10 @@ public class VentanaAgregar extends javax.swing.JDialog {
             jrbTipoIVA21.setEnabled(true);
         }
     }
+
     private void jComboBoxBebidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxBebidasActionPerformed
         // TODO add your handling code here:
-       ajustarTipoIVA();
+        ajustarTipoIVA();
     }//GEN-LAST:event_jComboBoxBebidasActionPerformed
 
 
