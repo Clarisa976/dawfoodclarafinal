@@ -57,10 +57,21 @@ public class VentanaCarrito extends javax.swing.JDialog {
         jListCarrito.setModel(listModel);
         jScrollPane1.setViewportView(jListCarrito);
 
+        jBtnPagar.setBackground(new java.awt.Color(204, 255, 204));
+        jBtnPagar.setForeground(new java.awt.Color(0, 0, 0));
         jBtnPagar.setText("PAGAR");
+        jBtnPagar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnPagarActionPerformed(evt);
+            }
+        });
 
+        jBtnVaciar.setBackground(new java.awt.Color(204, 255, 204));
+        jBtnVaciar.setForeground(new java.awt.Color(0, 0, 0));
         jBtnVaciar.setText("VACIAR");
 
+        jBtnVolver.setBackground(new java.awt.Color(204, 255, 204));
+        jBtnVolver.setForeground(new java.awt.Color(0, 0, 0));
         jBtnVolver.setText("VOLVER");
         jBtnVolver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -149,6 +160,11 @@ public class VentanaCarrito extends javax.swing.JDialog {
         // TODO add your handling code here:
         dispose();
     }//GEN-LAST:event_jBtnVolverActionPerformed
+
+    private void jBtnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPagarActionPerformed
+        // TODO add your handling code here:
+        new VentanaPagar(panelMain, true).setVisible(true);
+    }//GEN-LAST:event_jBtnPagarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
