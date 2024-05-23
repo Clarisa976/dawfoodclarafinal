@@ -375,25 +375,6 @@ public class VentanaPagar extends java.awt.Dialog {
                     //creamos el detalleticket
                     dtjc.create(detalleticket);
 
-                    //creamos un ticket
-//                tjc.create(ticket);
-//                for (Map.Entry<String, Integer> entry : VentanaCarrito.getProductosCarrito().entrySet()) {
-//                    String nombreProducto = entry.getKey().split(" - ")[0];
-//                    int cantidad = entry.getValue();
-//                    Productos producto = (Productos) em.createQuery("SELECT p FROM Productos p WHERE p.nombre = :nombre")
-//                            .setParameter("nombre", nombreProducto)
-//                            .getSingleResult();
-//
-//                    Detalletickets detalletickets = new Detalletickets(new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto()));
-//                    detalletickets.setCantidadProducto(cantidad);
-//                    detalletickets.setProductos(producto);
-//                    detalletickets.setTickets(ticket);
-//
-//                    dtjc.create(detalletickets);
-//
-//                    //restamos el stock vendido del producto
-//                    producto.setStock(producto.getStock() - cantidad);
-//                    em.merge(producto);
                 }
 
                 em.getTransaction().commit();
