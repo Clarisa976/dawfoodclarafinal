@@ -71,6 +71,11 @@ public class VentanaCarrito extends javax.swing.JDialog {
         jBtnVaciar.setBackground(new java.awt.Color(204, 255, 204));
         jBtnVaciar.setForeground(new java.awt.Color(0, 0, 0));
         jBtnVaciar.setText("VACIAR");
+        jBtnVaciar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnVaciarActionPerformed(evt);
+            }
+        });
 
         jBtnVolver.setBackground(new java.awt.Color(204, 255, 204));
         jBtnVolver.setForeground(new java.awt.Color(0, 0, 0));
@@ -135,7 +140,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
 //    }
     /**/
     public static void agregarProducto(String nombreProducto, BigDecimal precioConIVA, int cantidad) {
-        String claveProducto = nombreProducto + " - Precio unitario: " 
+        String claveProducto = nombreProducto + " - Precio unitario: "
                 + String.format("%.2f", precioConIVA);
 
         if (productosCarrito.containsKey(claveProducto)) {
@@ -149,7 +154,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
                     BigDecimal precioTotal = precioConIVA.multiply(new BigDecimal(nuevaCantidad));
                     listModel.set(i, String.format("%s "
                             + "- Cantidad: %d "
-                            + "- Precio total: %.2f", 
+                            + "- Precio total: %.2f",
                             nombreProducto, nuevaCantidad, precioTotal));
                     break;
                 }
@@ -173,6 +178,21 @@ public class VentanaCarrito extends javax.swing.JDialog {
         new VentanaPagar(panelMain, true).setVisible(true);
     }//GEN-LAST:event_jBtnPagarActionPerformed
 
+    private void jBtnVaciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVaciarActionPerformed
+        // TODO add your handling code here:
+        listModel.clear();
+        productosCarrito.clear();
+    }//GEN-LAST:event_jBtnVaciarActionPerformed
+    
+    //método get para poder llamar al carrito desde otras ventanas
+    public static HashMap<String, Integer> getProductosCarrito() {
+        return productosCarrito;
+    }
+    //método para borrar el contenido del carrito desde otras ventanas
+    public static void vaciarCarrito() {
+        listModel.clear();
+        productosCarrito.clear();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnPagar;

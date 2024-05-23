@@ -49,6 +49,7 @@ public class VentanaCompras extends javax.swing.JDialog {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo_Wok-and-roll.png"))); // NOI18N
 
         jBtnMenu.setBackground(new java.awt.Color(51, 51, 51));
+        jBtnMenu.setForeground(new java.awt.Color(51, 51, 51));
         jBtnMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/menu.png"))); // NOI18N
         jBtnMenu.setBorder(null);
         jBtnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -63,8 +64,10 @@ public class VentanaCompras extends javax.swing.JDialog {
         jLabel2.setText("MENÚ");
 
         jBtnCarrito.setBackground(new java.awt.Color(51, 51, 51));
+        jBtnCarrito.setForeground(new java.awt.Color(51, 51, 51));
         jBtnCarrito.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carrito.png"))); // NOI18N
         jBtnCarrito.setBorder(null);
+        jBtnCarrito.setBorderPainted(false);
         jBtnCarrito.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnCarritoActionPerformed(evt);
@@ -77,6 +80,7 @@ public class VentanaCompras extends javax.swing.JDialog {
         jLabel3.setText("CARRITO");
 
         jBtnVolver.setBackground(new java.awt.Color(51, 51, 51));
+        jBtnVolver.setForeground(new java.awt.Color(51, 51, 51));
         jBtnVolver.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salir.png"))); // NOI18N
         jBtnVolver.setToolTipText("Volver al menú principal");
         jBtnVolver.setBorder(null);
@@ -122,13 +126,13 @@ public class VentanaCompras extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jBtnVolver)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBtnVolver, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel4)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBtnCarrito)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jBtnCarrito, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBtnMenu, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

@@ -4,6 +4,31 @@
  */
 package views;
 
+import controllers.DetalleticketsJpaController;
+import controllers.ProductosJpaController;
+import controllers.TicketsJpaController;
+import controllers.TpvJpaController;
+import daw.Tarjeta;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import javax.swing.JOptionPane;
+import models.Detalletickets;
+import models.DetalleticketsPK;
+import models.Productos;
+import models.Tickets;
+import models.Tpv;
+
 /**
  *
  * @author clara
@@ -13,10 +38,12 @@ public class VentanaPagar extends java.awt.Dialog {
     /**
      * Creates new form VentanaPagar
      */
-    
     private PanelPrincipal panelMain;
-
-
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final TicketsJpaController tjc = new TicketsJpaController(emf);
+    private static final DetalleticketsJpaController dtjc = new DetalleticketsJpaController(emf);
+    private static final ProductosJpaController pjc = new ProductosJpaController(emf);
+    private static final TpvJpaController tpvjc = new TpvJpaController(emf);
 
     public VentanaPagar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
@@ -62,7 +89,7 @@ public class VentanaPagar extends java.awt.Dialog {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/logo2.png"))); // NOI18N
 
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("Introduce los números de tu tarjeta:");
+        jLabel2.setText("Introduce los últimos cuatro números de tu tarjeta*:");
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/credit-card-alt-regular-24.png"))); // NOI18N
 
@@ -77,7 +104,7 @@ public class VentanaPagar extends java.awt.Dialog {
         });
 
         jLabel4.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel4.setText("Caducidad:");
+        jLabel4.setText("Caducidad*:");
 
         jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/calendar-regular-24.png"))); // NOI18N
 
@@ -103,7 +130,7 @@ public class VentanaPagar extends java.awt.Dialog {
         });
 
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel7.setText("Código de seguridad:");
+        jLabel7.setText("Código de seguridad*:");
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/lock-alt-solid-24.png"))); // NOI18N
 
@@ -174,7 +201,7 @@ public class VentanaPagar extends java.awt.Dialog {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(96, 96, 96)
                         .addComponent(jLabel1)))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnCancelar, jBtnPagar});
@@ -243,11 +270,168 @@ public class VentanaPagar extends java.awt.Dialog {
 
     private void jBtnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPagarActionPerformed
         // TODO add your handling code here:
-        
+
         //Comprobamos que los cuatro dígitos introducidos, la fecha y el cvv
         //coinciden con uno de los que tenemos regristrados para simular una
         //pasarela de pago
+        //obtenemos los datos introducidos en la ventana
+        String numeroTarjeta = jtfNumeroTarjeta.getText();
+        String cvv = jtfCVV.getText();
+        int mes = Integer.parseInt((String) jcbMes.getSelectedItem());
+        int anio = Integer.parseInt((String) jcbAnio.getSelectedItem());
+        LocalDate fechaCaducidad = LocalDate.of(anio, mes, 1);
+        //comprobamos si coincide o no
+        Tarjeta tarjeta = buscarTarjeta(numeroTarjeta, fechaCaducidad, cvv);
+
+        if (tarjeta != null) {
+            //si coincide procesamos el pago
+            procesarPago(tarjeta);
+        } else {
+            //sino mensaje de error
+            JOptionPane.showMessageDialog(this, "Datos de tarjeta incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
     }//GEN-LAST:event_jBtnPagarActionPerformed
+
+    //método para buscar la tarjeta en la lista de tarjetas que tenemos para probar
+    private Tarjeta buscarTarjeta(String numero, LocalDate fechaCaducidad, String cvv) {
+        List<Tarjeta> tarjetasRegistradas = Tarjeta.tarjetasRegistradasBD();
+        for (Tarjeta tarjeta : tarjetasRegistradas) {
+            if (tarjeta.getNumeroTarjeta().endsWith(numero)
+                    && tarjeta.getFechaCaducidadTarjeta().equals(fechaCaducidad)
+                    && tarjeta.getCvv().equals(cvv)) {
+                return tarjeta;
+            }
+        }
+        return null; //tarjeta no encontrada
+    }
+
+    //método para procesar el pago
+    private void procesarPago(Tarjeta tarjeta) {
+        //llamamos a método de calcular el total
+        BigDecimal total = calcularTotalCarrito();
+        if (tarjeta.getSaldoTarjeta() >= total.doubleValue()) {
+
+            EntityManager em = emf.createEntityManager();
+            try {
+                em.getTransaction().begin();
+                HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
+
+                //comprobamos que el stock añadido al carrito sea inferior
+                //al stock del producto en cuestion
+                for (String claveProducto : productosCarrito.keySet()) {
+                    String[] partes = claveProducto.split(" - ");
+                    String nombreProducto = partes[0].trim();
+                    int cantidad = productosCarrito.get(claveProducto);
+
+                    TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
+                    query.setParameter("nombre", nombreProducto);
+                    Productos producto = query.getSingleResult();
+                    //si no hay suficiente
+                    if (producto.getStock() < cantidad) {
+                        JOptionPane.showMessageDialog(null, "No hay suficiente stock para el producto: " + nombreProducto);
+                        em.getTransaction().rollback();
+                        return;
+                    }
+                }
+                //si hay stock suficiente
+                //restamos el saldo a la tarjeta
+//                tarjeta.setSaldoTarjeta(tarjeta.getSaldoTarjeta() - total.doubleValue());
+
+                Tickets ticket = new Tickets();
+                ticket.setNumeroPedido(new Random().nextInt(1000));
+                ticket.setCodTransaccion("TRANS" + new Random().nextInt(999));
+                ticket.setFechaOperacion(new Date());
+                ticket.setHoraOperacion(new Date());
+                ticket.setImporteTotal(total);
+                
+                Tpv aux = tpvjc.findTpv(1);
+                ticket.setIdTpv(aux);
+                //creamos el ticket
+                tjc.create(ticket);
+
+                //actualizamos el stock y creamos detalle de tickets
+                for (String claveProducto : productosCarrito.keySet()) {
+                    String[] partes = claveProducto.split(" - ");
+                    String nombreProducto = partes[0].trim();
+                    int cantidad = productosCarrito.get(claveProducto);
+
+                    TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
+                    query.setParameter("nombre", nombreProducto);
+                    Productos producto = query.getSingleResult();
+
+                    producto.setStock(producto.getStock() - cantidad);
+                    //editamos el producto
+                    pjc.edit(producto);
+
+                    Detalletickets detalleticket = new Detalletickets();
+                    DetalleticketsPK detalleticketsPK = new DetalleticketsPK();
+                    detalleticketsPK.setIdProducto(producto.getIdProducto());
+                    detalleticketsPK.setIdTicket(ticket.getIdTicket());
+                    detalleticket.setDetalleticketsPK(detalleticketsPK);
+                    detalleticket.setCantidadProducto(cantidad);
+                    detalleticket.setProductos(producto);
+                    detalleticket.setTickets(ticket);
+                    //creamos el detalleticket
+                    dtjc.create(detalleticket);
+
+                    //creamos un ticket
+//                tjc.create(ticket);
+//                for (Map.Entry<String, Integer> entry : VentanaCarrito.getProductosCarrito().entrySet()) {
+//                    String nombreProducto = entry.getKey().split(" - ")[0];
+//                    int cantidad = entry.getValue();
+//                    Productos producto = (Productos) em.createQuery("SELECT p FROM Productos p WHERE p.nombre = :nombre")
+//                            .setParameter("nombre", nombreProducto)
+//                            .getSingleResult();
+//
+//                    Detalletickets detalletickets = new Detalletickets(new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto()));
+//                    detalletickets.setCantidadProducto(cantidad);
+//                    detalletickets.setProductos(producto);
+//                    detalletickets.setTickets(ticket);
+//
+//                    dtjc.create(detalletickets);
+//
+//                    //restamos el stock vendido del producto
+//                    producto.setStock(producto.getStock() - cantidad);
+//                    em.merge(producto);
+                }
+
+                em.getTransaction().commit();
+
+                JOptionPane.showMessageDialog(this, "Pago realizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                //vaciamos el carrito después de pagar
+                VentanaCarrito.vaciarCarrito();
+                dispose();
+            } catch (Exception e) {
+                em.getTransaction().rollback();
+                JOptionPane.showMessageDialog(this, "Error al procesar el pago.", "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                em.close();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Saldo insuficiente.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    //método en el que cogemos el total del carrito y lo calculamos
+    private BigDecimal calcularTotalCarrito() {
+        BigDecimal total = BigDecimal.ZERO;
+        HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
+
+        for (String claveProducto : productosCarrito.keySet()) {
+            String[] partes = claveProducto.split(" - Precio unitario: ");
+            String precioStr = partes[1].trim();
+
+            //remplazamos las coma por punto para que no pete
+            precioStr = precioStr.replace(",", ".");
+
+            BigDecimal precio = new BigDecimal(precioStr);
+            int cantidad = productosCarrito.get(claveProducto);
+            total = total.add(precio.multiply(new BigDecimal(cantidad)));
+        }
+        return total.setScale(2, RoundingMode.HALF_UP);
+
+    }
 
     private void jtfNumeroTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfNumeroTarjetaActionPerformed
         // TODO add your handling code here:
