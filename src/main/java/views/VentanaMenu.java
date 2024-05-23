@@ -337,6 +337,7 @@ public class VentanaMenu extends javax.swing.JDialog {
 
     private void jBtnVerCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVerCarritoActionPerformed
         // TODO add your handling code here:
+        cargarTablas();
         new VentanaCarrito(panelMain, true).setVisible(true);
     }//GEN-LAST:event_jBtnVerCarritoActionPerformed
 
@@ -387,7 +388,7 @@ public class VentanaMenu extends javax.swing.JDialog {
 
     //con este método cargaremos las tablas filtrando el tipo de la categoria y 
     //en que tabla iría
-    private void cargarTablas() {
+    public void cargarTablas() {
         cargarDatosJTable("COMIDAS", jTableComidas);
         cargarDatosJTable("BEBIDAS", jTableBebidas);
         cargarDatosJTable("POSTRES", jTablePostres);

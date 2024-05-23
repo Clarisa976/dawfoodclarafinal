@@ -4,9 +4,12 @@
  */
 package views;
 
+import controllers.TicketsJpaController;
+import daw.Metodos;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import models.Detalletickets;
@@ -23,6 +26,7 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
      * Creates new form VentanaDetallesTicket
      */
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final TicketsJpaController tjc = new TicketsJpaController(emf);
     private PanelPrincipal panelMain;
     private Tickets ticket;
 
@@ -59,6 +63,7 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
         jPanel1.setBackground(new java.awt.Color(51, 51, 51));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
+        jtaDetallesTicket.setEditable(false);
         jtaDetallesTicket.setBackground(new java.awt.Color(204, 204, 204));
         jtaDetallesTicket.setColumns(20);
         jtaDetallesTicket.setForeground(new java.awt.Color(0, 0, 0));
@@ -81,10 +86,10 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(159, 159, 159)
+                .addGap(132, 132, 132)
                 .addComponent(jBtnVolver)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -117,61 +122,52 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
      */
     //método para cargar los datos del ticket
     private void mostrarDatosTicket() {
-        String detalles = "";
-        detalles += "================================\n";
-        detalles += "          TICKET DE COMPRA       \n";
-        detalles += "            Wok and Roll         \n";
-        detalles += "================================\n";
-        detalles += "ID del Pedido: " + ticket.getIdTicket() + "\n";
-        detalles += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
-        detalles += "Fecha de Emisión: " + formatearFecha(ticket.getFechaOperacion()) + "\n";
-        detalles += "Hora de Emisión: " + formatearHora(ticket.getHoraOperacion()) + "\n";
-        detalles += "================================\n";
-        detalles += "Productos:\n";
+        EntityManager em = emf.createEntityManager();
+        try {
+            tjc.findTickets(ticket.getIdTicket());
 
-        BigDecimal totalSinIVA = BigDecimal.ZERO;
-        BigDecimal totalConIVA = BigDecimal.ZERO;
+            String detalles = "";
+            detalles += "================================\n";
+            detalles += ""+ticket.getIdTpv()+"           \n";
+            detalles += "Número de transacción: " + ticket.getCodTransaccion() + "\n";
+            detalles += "================================\n";
+            detalles += "          TICKET DE COMPRA       \n";
+            detalles += "            Wok and Roll         \n";
+            detalles += "================================\n";
+            detalles += "ID del Pedido: " + ticket.getIdTicket() + "\n";
+            detalles += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
+            detalles += "Fecha de Emisión: " + Metodos.formatearFecha(ticket.getFechaOperacion()) + "\n";
+            detalles += "Hora de Emisión: " + Metodos.formatearHora(ticket.getHoraOperacion()) + "\n";
+            detalles += "================================\n";
+            detalles += "Productos:\n";
 
-        for (Detalletickets detalle : ticket.getDetalleticketsCollection()) {
-            Productos producto = detalle.getProductos();
-            BigDecimal precioSinIVA = producto.getPrecioSinIVA();
-            BigDecimal tipoIVA = calcularTipoIVA(producto.getTipoIVA());
-            BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(tipoIVA));
-            detalles += "- " + producto.getNombre()
-                    + " x " + detalle.getCantidadProducto()
-                    + " - " + String.format("%.2f", precioConIVA) + "€\n";
-            totalSinIVA = totalSinIVA.add(precioSinIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
-            totalConIVA = totalConIVA.add(precioConIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
+            BigDecimal totalSinIVA = BigDecimal.ZERO;
+            BigDecimal totalConIVA = BigDecimal.ZERO;
+
+            for (Detalletickets detalle : ticket.getDetalleticketsCollection()) {
+                Productos producto = detalle.getProductos();
+                BigDecimal precioSinIVA = producto.getPrecioSinIVA();
+                BigDecimal tipoIVA = Metodos.calcularTipoIVA(producto.getTipoIVA());
+                BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(tipoIVA));
+                detalles += "- " + producto.getNombre()
+                        + " x " + detalle.getCantidadProducto()
+                        + " - " + String.format("%.2f", precioConIVA) + "€\n";
+                totalSinIVA = totalSinIVA.add(precioSinIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
+                totalConIVA = totalConIVA.add(precioConIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
+            }
+
+            detalles += "================================\n";
+            detalles += "Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n";
+            detalles += "Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n";
+            detalles += "================================\n";
+
+            jtaDetallesTicket.setText(detalles);
+        } finally {
+            em.close();
         }
-
-        detalles += "================================\n";
-        detalles += "Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n";
-        detalles += "Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n";
-        detalles += "================================\n";
-
-        jtaDetallesTicket.setText(detalles);
     }
 
-    private BigDecimal calcularTipoIVA(String tipoIVA) {
-        switch (tipoIVA) {
-            case "IVA_DIEZ":
-                return new BigDecimal("0.10");
-            case "IVA_VEINTIUNO":
-                return new BigDecimal("0.21");
-            default:
-                return BigDecimal.ZERO;
-        }
-    }
 
-    private String formatearFecha(Date fecha) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(fecha);
-    }
-
-    private String formatearHora(Date hora) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        return sdf.format(hora);
-    }
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         setVisible(false);
         dispose();

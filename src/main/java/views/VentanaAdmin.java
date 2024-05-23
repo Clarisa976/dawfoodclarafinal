@@ -4,13 +4,12 @@
  */
 package views;
 
-import controllers.ProductosJpaController;
+
 import controllers.TpvJpaController;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.Tpv;
-import views.PanelPrincipal;
 
 /**
  *

@@ -5,8 +5,7 @@
 package views;
 
 import controllers.TicketsJpaController;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import daw.Metodos;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -169,8 +168,8 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
                 fila[1] = ticket.getIdTicket();
                 fila[2] = ticket.getNumeroPedido();
                 fila[3] = ticket.getCodTransaccion();
-                fila[4] = formatearFecha(ticket.getFechaOperacion());
-                fila[5] = formatearHora(ticket.getHoraOperacion());
+                fila[4] = Metodos.formatearFecha(ticket.getFechaOperacion());
+                fila[5] = Metodos.formatearHora(ticket.getHoraOperacion());
                 fila[6] = ticket.getImporteTotal();
 
                 modelo.addRow(fila);
@@ -189,15 +188,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
 
     }
 
-    private static String formatearFecha(Date fecha) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return sdf.format(fecha);
-    }
-
-    private static String formatearHora(Date hora) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-        return sdf.format(hora);
-    }
+    
 
     /**
      * Closes the dialog

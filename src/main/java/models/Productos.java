@@ -36,6 +36,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Productos.findByStock", query = "SELECT p FROM Productos p WHERE p.stock = :stock"),
     //query para buscar por categoria
     @NamedQuery(name = "Productos.findByCategoria", query = "SELECT p FROM Productos p WHERE p.idTipoProducto.nomCategoria = :nomCategoria")
+   
 })
 
 public class Productos implements Serializable {
