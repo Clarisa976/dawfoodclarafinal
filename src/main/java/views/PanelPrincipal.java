@@ -137,7 +137,8 @@ public class PanelPrincipal extends javax.swing.JFrame {
 
     private void jBtnGestionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnGestionarActionPerformed
         // TODO add your handling code here:
-        new VentanaAdministrador(this, true).setVisible(true);
+        new VentanaAdmin(this, true).setVisible(true);
+//        new VentanaAdministrador(this, true).setVisible(true);
         
     }//GEN-LAST:event_jBtnGestionarActionPerformed
 

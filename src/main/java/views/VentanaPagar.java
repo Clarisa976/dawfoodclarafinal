@@ -15,12 +15,12 @@ public class VentanaPagar extends java.awt.Dialog {
      */
     private PanelPrincipal panelMain;
 
-    private final Integer[] mes = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-    private final Integer[] anio = {2024, 2025, 2026, 2027, 2028, 2029, 2030};
+
 
     public VentanaPagar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(panelMain);
     }
 
     /**

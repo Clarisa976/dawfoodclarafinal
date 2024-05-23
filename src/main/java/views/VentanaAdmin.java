@@ -4,6 +4,7 @@
  */
 package views;
 
+import controllers.ProductosJpaController;
 import controllers.TpvJpaController;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -20,11 +21,14 @@ public class VentanaAdmin extends java.awt.Dialog {
     /**
      * Creates new form VentanaAdmin
      */
-    PanelPrincipal panelInicio;
+    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static TpvJpaController tjc = new TpvJpaController(emf);
+    private PanelPrincipal panelMain;
 
     public VentanaAdmin(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        setLocationRelativeTo(panelMain);
     }
 
     /**
@@ -56,7 +60,7 @@ public class VentanaAdmin extends java.awt.Dialog {
 
         jPassField.setBackground(new java.awt.Color(204, 204, 204));
         jPassField.setForeground(new java.awt.Color(0, 0, 0));
-        jPassField.setText("pass");
+        jPassField.setText("Ab*+34");
         jPassField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jPassFieldActionPerformed(evt);
@@ -80,9 +84,8 @@ public class VentanaAdmin extends java.awt.Dialog {
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jBtnAcceder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPassField)))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPassField))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -123,7 +126,7 @@ public class VentanaAdmin extends java.awt.Dialog {
 
     private void jBtnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAccederActionPerformed
         // TODO add your handling code here:
-        new VentanaAdministrador(panelInicio, true).setVisible(true);
+        new VentanaAdministrador(panelMain, true).setVisible(true);
     }//GEN-LAST:event_jBtnAccederActionPerformed
 
     private void jPassFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassFieldActionPerformed
@@ -131,23 +134,20 @@ public class VentanaAdmin extends java.awt.Dialog {
         //la contraseña que se ha puesto
         String passIngresada = new String(jPassField.getPassword());
 
-        //instancia del controlador JPA
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("dawFoodClara");
-        TpvJpaController controller = new TpvJpaController(emf);
 
         //contraseña almacenada en la base de datos
-        Tpv tpv = controller.findTpv(1);
+        Tpv tpv = tjc.findTpv(1);
         String passBD = tpv.getPassAdministrador();
         System.out.println(passBD);
 
         //se comprueba si las contraseñas coinciden
         if (passIngresada.equals(passBD)) {
             //si coinciden
-            new VentanaAdministrador(panelInicio, true).setVisible(true);
+            new VentanaAdministrador(panelMain, true).setVisible(true);
             System.out.println("Las contraseñas coinciden");
         } else {
             //si no coinciden
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(null,
                     "Te has equivocado", "Cagaste",
                     JOptionPane.ERROR_MESSAGE);
         }
