@@ -7,6 +7,7 @@ package views;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -43,6 +44,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
         jBtnPagar = new javax.swing.JButton();
         jBtnVaciar = new javax.swing.JButton();
         jBtnVolver = new javax.swing.JButton();
+        jBtnEliminarSeleccionado = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Wok & Roll - Carrito");
@@ -70,7 +72,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
 
         jBtnVaciar.setBackground(new java.awt.Color(204, 255, 204));
         jBtnVaciar.setForeground(new java.awt.Color(0, 0, 0));
-        jBtnVaciar.setText("VACIAR");
+        jBtnVaciar.setText("VACIAR CARRITO");
         jBtnVaciar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnVaciarActionPerformed(evt);
@@ -86,6 +88,16 @@ public class VentanaCarrito extends javax.swing.JDialog {
             }
         });
 
+        jBtnEliminarSeleccionado.setBackground(new java.awt.Color(204, 255, 204));
+        jBtnEliminarSeleccionado.setForeground(new java.awt.Color(0, 0, 0));
+        jBtnEliminarSeleccionado.setText("QUITAR DEL CARRITO");
+        jBtnEliminarSeleccionado.setToolTipText("Elimina el artículo seleccionado");
+        jBtnEliminarSeleccionado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEliminarSeleccionadoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -95,16 +107,18 @@ public class VentanaCarrito extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(54, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane1)
+                .addContainerGap(47, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jBtnPagar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtnVaciar)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtnVolver)))
-                .addContainerGap(88, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBtnEliminarSeleccionado)
+                            .addComponent(jBtnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jBtnVolver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jBtnVaciar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,10 +127,13 @@ public class VentanaCarrito extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBtnVaciar)
+                    .addComponent(jBtnEliminarSeleccionado))
+                .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnPagar)
-                    .addComponent(jBtnVaciar)
                     .addComponent(jBtnVolver))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
@@ -135,10 +152,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-//    public static void agregarProducto(String producto) {
-//        listModel.addElement(producto);
-//    }
-    /**/
+
     public static void agregarProducto(String nombreProducto, BigDecimal precioConIVA, int cantidad) {
         String claveProducto = nombreProducto + " - Precio unitario: "
                 + String.format("%.2f", precioConIVA);
@@ -175,6 +189,11 @@ public class VentanaCarrito extends javax.swing.JDialog {
 
     private void jBtnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPagarActionPerformed
         // TODO add your handling code here:
+        //si la lista está vacía 
+        if (listModel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El carrito está vacío...");
+            return;
+        }//sino lo está accedemos a la ventana de pago
         new VentanaPagar(panelMain, true).setVisible(true);
     }//GEN-LAST:event_jBtnPagarActionPerformed
 
@@ -183,6 +202,24 @@ public class VentanaCarrito extends javax.swing.JDialog {
         listModel.clear();
         productosCarrito.clear();
     }//GEN-LAST:event_jBtnVaciarActionPerformed
+
+    private void jBtnEliminarSeleccionadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminarSeleccionadoActionPerformed
+        // TODO add your handling code here:
+        //si seleccionamos un item de la lista lo borramos
+        //sin necesidad de borrar toda la lista
+        int selectedIndex = jListCarrito.getSelectedIndex();
+        if (selectedIndex != -1) {
+            String selectedItem = listModel.getElementAt(selectedIndex);
+            listModel.removeElementAt(selectedIndex);
+
+            //actualiza el map
+            String[] partes = selectedItem.split(" - ");
+            String claveProducto = partes[0] + " - " + partes[1];
+            productosCarrito.remove(claveProducto);
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione un producto para eliminar.");
+        }
+    }//GEN-LAST:event_jBtnEliminarSeleccionadoActionPerformed
     
     //método get para poder llamar al carrito desde otras ventanas
     public static HashMap<String, Integer> getProductosCarrito() {
@@ -195,6 +232,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtnEliminarSeleccionado;
     private javax.swing.JButton jBtnPagar;
     private javax.swing.JButton jBtnVaciar;
     private javax.swing.JButton jBtnVolver;

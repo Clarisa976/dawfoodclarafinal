@@ -322,11 +322,6 @@ public class VentanaMenu extends javax.swing.JDialog {
                 //lo pasamos a string
                 String precioConIVAStr = String.format("%.2f", precioConIVA.multiply(new BigDecimal(cantidad)));
 
-                //lo ponemos bonico para añadirlo al JList del carrito
-//                String tmp = String.format("%s - Cantidad: %d - Precio: %s",
-//                        nombreProducto, cantidad,
-//                        precioConIVA.multiply(new BigDecimal(cantidad)).toString());
-
                 //llamamos al jdialog del carrito y agrergamos el string anterior
                 VentanaCarrito.agregarProducto(nombreProducto,precioConIVA,cantidad);
                 
@@ -376,6 +371,7 @@ public class VentanaMenu extends javax.swing.JDialog {
                 fila[2] = producto.getPrecioSinIVA();
                 fila[3] = producto.getTipoIVA();
                 fila[4] = calcularPrecioConIVA(producto.getPrecioSinIVA(), producto.getTipoIVA());
+                fila[5] = producto.getStock();
 
                 modelo.addRow(fila);
             }
