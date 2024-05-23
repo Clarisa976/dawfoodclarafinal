@@ -4,6 +4,7 @@
  */
 package views;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import javax.swing.DefaultListModel;
 
@@ -16,8 +17,8 @@ public class VentanaCarrito extends javax.swing.JDialog {
     /**
      * Creates new form VentanaCarrito
      */
-    private static DefaultListModel<String> listModel = new DefaultListModel<>();
-    private static HashMap<String, Integer> productosCarrito = new HashMap<>();
+    private static final DefaultListModel<String> listModel = new DefaultListModel<>();
+    private static final HashMap<String, Integer> productosCarrito = new HashMap<>();
     private PanelPrincipal panelMain;
 
     public VentanaCarrito(PanelPrincipal parent, boolean modal) {
@@ -128,34 +129,39 @@ public class VentanaCarrito extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    public static void agregarProducto(String producto) {
-        listModel.addElement(producto);
-    }
-    /*
-      public static void agregarProducto(String nombreProducto, BigDecimal precioConIVA, int cantidad) {
-        String claveProducto = nombreProducto + " - Precio unitario: " + String.format("%.2f", precioConIVA);
-        
+//    public static void agregarProducto(String producto) {
+//        listModel.addElement(producto);
+//    }
+    /**/
+    public static void agregarProducto(String nombreProducto, BigDecimal precioConIVA, int cantidad) {
+        String claveProducto = nombreProducto + " - Precio unitario: " 
+                + String.format("%.2f", precioConIVA);
+
         if (productosCarrito.containsKey(claveProducto)) {
             int cantidadActual = productosCarrito.get(claveProducto);
             int nuevaCantidad = cantidadActual + cantidad;
             productosCarrito.put(claveProducto, nuevaCantidad);
-            
+
             for (int i = 0; i < listModel.size(); i++) {
                 String elemento = listModel.get(i);
                 if (elemento.startsWith(nombreProducto)) {
                     BigDecimal precioTotal = precioConIVA.multiply(new BigDecimal(nuevaCantidad));
-                    listModel.set(i, String.format("%s - Cantidad: %d - Precio total: %.2f", nombreProducto, nuevaCantidad, precioTotal));
+                    listModel.set(i, String.format("%s "
+                            + "- Cantidad: %d "
+                            + "- Precio total: %.2f", 
+                            nombreProducto, nuevaCantidad, precioTotal));
                     break;
                 }
             }
         } else {
             productosCarrito.put(claveProducto, cantidad);
             BigDecimal precioTotal = precioConIVA.multiply(new BigDecimal(cantidad));
-            listModel.addElement(String.format("%s - Cantidad: %d - Precio total: %.2f", nombreProducto, cantidad, precioTotal));
+            listModel.addElement(String.format("%s - Cantidad: %d "
+                    + "- Precio total: %.2f", nombreProducto, cantidad, precioTotal));
         }
     }
-    
-    */
+
+
     private void jBtnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVolverActionPerformed
         // TODO add your handling code here:
         dispose();

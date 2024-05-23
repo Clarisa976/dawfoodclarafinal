@@ -24,7 +24,7 @@ public class VentanaMenu extends javax.swing.JDialog {
     /**
      * Creates new form VentanaMenu
      */
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private PanelPrincipal panelMain;
 
     public VentanaMenu(PanelPrincipal parent, boolean modal) {
@@ -301,12 +301,12 @@ public class VentanaMenu extends javax.swing.JDialog {
                 String precioConIVAStr = String.format("%.2f", precioConIVA.multiply(new BigDecimal(cantidad)));
 
                 //lo ponemos bonico para añadirlo al JList del carrito
-                String tmp = String.format("%s - Cantidad: %d - Precio: %s",
-                        nombreProducto, cantidad,
-                        precioConIVA.multiply(new BigDecimal(cantidad)).toString());
+//                String tmp = String.format("%s - Cantidad: %d - Precio: %s",
+//                        nombreProducto, cantidad,
+//                        precioConIVA.multiply(new BigDecimal(cantidad)).toString());
 
                 //llamamos al jdialog del carrito y agrergamos el string anterior
-                VentanaCarrito.agregarProducto(tmp);
+                VentanaCarrito.agregarProducto(nombreProducto,precioConIVA,cantidad);
 
             }
         } else {
