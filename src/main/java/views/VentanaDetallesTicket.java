@@ -5,6 +5,8 @@
 package views;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import models.Detalletickets;
@@ -122,7 +124,8 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
         detalles += "================================\n";
         detalles += "ID del Pedido: " + ticket.getIdTicket() + "\n";
         detalles += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
-        detalles += "Fecha de Emisión: " + ticket.getFechaOperacion().toString() + " " + ticket.getHoraOperacion().toString() + "\n";
+        detalles += "Fecha de Emisión: " + formatearFecha(ticket.getFechaOperacion()) + "\n";
+        detalles += "Hora de Emisión: " + formatearHora(ticket.getHoraOperacion()) + "\n";
         detalles += "================================\n";
         detalles += "Productos:\n";
 
@@ -142,8 +145,8 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
         }
 
         detalles += "================================\n";
-        detalles += "Importe Total sin IVA: " + totalSinIVA + "€\n";
-        detalles += "Importe Total con IVA: " + totalConIVA + "€\n";
+        detalles += "Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n";
+        detalles += "Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n";
         detalles += "================================\n";
 
         jtaDetallesTicket.setText(detalles);
@@ -158,6 +161,16 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
             default:
                 return BigDecimal.ZERO;
         }
+    }
+
+    private String formatearFecha(Date fecha) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return sdf.format(fecha);
+    }
+
+    private String formatearHora(Date hora) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+        return sdf.format(hora);
     }
     private void closeDialog(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_closeDialog
         setVisible(false);
