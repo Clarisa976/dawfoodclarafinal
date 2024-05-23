@@ -200,8 +200,8 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 if (productoEnTicket) {
                     JOptionPane.showMessageDialog(null, "El producto no puede ser modificado porque está presente en un ticket.");
                 } else {
-                   pjc.destroy(idProducto);
-                JOptionPane.showMessageDialog(null, "Producto borrado exitosamente.");
+                new VentanaModificar(panelMain, true, idProducto).setVisible(true);
+//                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
                 }
                 // Una vez termine la ejecución de la ventana
                 // Llamo a cargar de nuevo los datos en el jTable con los cambios
