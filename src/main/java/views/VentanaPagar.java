@@ -13,6 +13,7 @@ public class VentanaPagar extends java.awt.Dialog {
     /**
      * Creates new form VentanaPagar
      */
+    
     private PanelPrincipal panelMain;
 
 
