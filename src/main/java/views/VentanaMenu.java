@@ -307,6 +307,9 @@ public class VentanaMenu extends javax.swing.JDialog {
 
                 //llamamos al jdialog del carrito y agrergamos el string anterior
                 VentanaCarrito.agregarProducto(nombreProducto,precioConIVA,cantidad);
+                
+                //después de agregar un producto al carrito reseteamos el jspinner
+                jSpinnerCantidad.setValue(0);
 
             }
         } else {
