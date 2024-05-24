@@ -17,13 +17,16 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.swing.JOptionPane;
@@ -48,6 +51,8 @@ public class VentanaPagar extends java.awt.Dialog {
     private static final DetalleticketsJpaController dtjc = new DetalleticketsJpaController(emf);
     private static final ProductosJpaController pjc = new ProductosJpaController(emf);
     private static final TpvJpaController tpvjc = new TpvJpaController(emf);
+    private static EntityManager em = emf.createEntityManager();
+    private static final HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
 
     public VentanaPagar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
@@ -288,12 +293,17 @@ public class VentanaPagar extends java.awt.Dialog {
         Tarjeta tarjeta = buscarTarjeta(numeroTarjeta, fechaCaducidad, cvv);
 
         if (tarjeta != null) {
-            //si coincide procesamos el pago
-            procesarPago(tarjeta);
+            // Si la tarjeta es válida, procedemos con la compra
+            try {
+                realizarCompra();
+                JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error al procesar la compra: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
         } else {
-            //sino mensaje de error
             JOptionPane.showMessageDialog(this, "Datos de tarjeta incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
+
 
     }//GEN-LAST:event_jBtnPagarActionPerformed
 
@@ -310,195 +320,77 @@ public class VentanaPagar extends java.awt.Dialog {
         return null; //tarjeta no encontrada
     }
 
-    //método para procesar el pago
-    private void procesarPago(Tarjeta tarjeta) {
-        // Llamamos al método de calcular el total
-        BigDecimal total = calcularTotalCarrito();
-        if (tarjeta.getSaldoTarjeta() >= total.doubleValue()) {
+    private void realizarCompra() throws Exception {
+        EntityManager em = emf.createEntityManager();
+        try {
+            em.getTransaction().begin();
 
-            EntityManager em = emf.createEntityManager();
-            try {
-                em.getTransaction().begin();
-                HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
+            //creamos un nuevo Ticket
+            Tickets ticket = new Tickets();
+            ticket.setFechaOperacion(new Date());
+            ticket.setHoraOperacion(new Date());
+            ticket.setNumeroPedido(new Random().nextInt(1, 10000));
+            ticket.setCodTransaccion("TRANS" + new Random().nextInt(1, 999));
+            ticket.setIdTpv(tpvjc.findTpv(1));
+            BigDecimal importeTotal = BigDecimal.ZERO;//no funciona si ponemos 0
 
-                //comprobamos que el stock añadido al carrito sea inferior
-                //al stock del producto en cuestión
-                for (String claveProducto : productosCarrito.keySet()) {
-                    String[] partes = claveProducto.split(" - ");
-                    String nombreProducto = partes[0].trim();
-                    int cantidad = productosCarrito.get(claveProducto);
+            //verificamos el stock del producto elegido en el carrito
+            //creamos un array  donde se guardarán los detalles de la compra
+            List<Detalletickets> detalles = new ArrayList<>();
+            for (Map.Entry<String, Integer> entry : productosCarrito.entrySet()) {
+                String nombreProducto = entry.getKey().split(" - ")[0];
+                int cantidad = entry.getValue();
 
-                    TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
-                    query.setParameter("nombre", nombreProducto);
-                    Productos producto = query.getSingleResult();
-                    //si no hay suficiente
-                    if (producto.getStock() < cantidad) {
-                        JOptionPane.showMessageDialog(null, "No hay suficiente stock para el producto: " + nombreProducto);
-                        em.getTransaction().rollback();
-                        return;
-                    }
+                //namequery para buscar los productos por el nombre
+                Productos producto = Metodos.findProductoByName(nombreProducto);
+                //si no hay stock suficiente salta la excepción
+                if (producto.getStock() < cantidad) {
+                    throw new Exception("No hay suficiente stock para el producto: " + nombreProducto);
                 }
 
-                //si hay stock suficiente
-                //testamos el saldo a la tarjeta
-//                tarjeta.setSaldoTarjeta(tarjeta.getSaldoTarjeta() - total.doubleValue());
-                Tpv aux = tpvjc.findTpv(1);
-
-                Tickets ticket = new Tickets();
-                ticket.setNumeroPedido(new Random().nextInt(10000));
-                ticket.setCodTransaccion("TRANS" + new Random().nextInt(999));
-                ticket.setFechaOperacion(new Date());
-                ticket.setHoraOperacion(new Date());
-                ticket.setImporteTotal(total);
-
-                ticket.setIdTpv(aux);
-                //creamos el ticket
-                tjc.create(ticket);
-
-                //actualizamos el stock y creamos detalle de tickets
-                for (String claveProducto : productosCarrito.keySet()) {
-                    String[] partes = claveProducto.split(" - ");
-                    String nombreProducto = partes[0].trim();
-                    int cantidad = productosCarrito.get(claveProducto);
-
-                    TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
-                    query.setParameter("nombre", nombreProducto);
-                    Productos producto = query.getSingleResult();
-
-                    producto.setStock(producto.getStock() - cantidad);
-                    //editamos el producto
-                    pjc.edit(producto);
-
-//                    DetalleticketsPK detalleTicketsPK = new DetalleticketsPK(ticket.getIdTicket(),producto.getIdProducto());
-                    Detalletickets detalleTicket = new Detalletickets();
-//                    detalleTicket.setDetalleticketsPK(new DetalleticketsPK());
-                    detalleTicket.setDetalleticketsPK(new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto()));
-                    detalleTicket.setCantidadProducto(cantidad);
-                    detalleTicket.setProductos(producto);
-                    detalleTicket.setTickets(ticket);
-                    //creamos el detalleticket
-                    dtjc.create(detalleTicket);
-
-                }
-
-                em.getTransaction().commit();
-
-                JOptionPane.showMessageDialog(this, "Pago realizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                //vaciamos el carrito después de pagar
-                VentanaCarrito.vaciarCarrito();
-                dispose();
-            } catch (Exception e) {
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().rollback();
-                }
-                JOptionPane.showMessageDialog(this, "Error al procesar el pago.", "Error", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                em.close();
+                //calculamos cuanto sería el importe total y lo añadimos al ticket
+                importeTotal = importeTotal.add(producto.getPrecioSinIVA().multiply(new BigDecimal(cantidad)));
             }
-        } else {
-            JOptionPane.showMessageDialog(this, "Saldo insuficiente.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            //hacemos el set del importe total
+            ticket.setImporteTotal(importeTotal);
+            //creamos el ticket
+            tjc.create(ticket);
+
+            //volvemos a recorrer el map del carrito y creamos el detalle ticket
+            //sino insistimos en esto no funciona
+            for (Map.Entry<String, Integer> entry : productosCarrito.entrySet()) {
+                String nombreProducto = entry.getKey().split(" - ")[0];
+                int cantidad = entry.getValue();
+
+                Productos producto = Metodos.findProductoByName(nombreProducto);
+
+                //creamos el detalleticket asigmandole la pk
+                DetalleticketsPK pk = new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto());
+                Detalletickets detalle = new Detalletickets(pk);
+                //lo vamos añadiendo a la lista de detalleticket
+                detalle.setCantidadProducto(cantidad);
+                detalle.setProductos(producto);
+                detalle.setTickets(ticket);
+
+                //actualizamos el stock del producto stock del producto
+                producto.setStock(producto.getStock() - cantidad);
+                //editamos el producto
+                pjc.edit(producto);
+                
+                //creamos el detalleticket con el jpa de detalleticket
+                dtjc.create(detalle);
+            }
+
+            em.getTransaction().commit();
+        } catch (Exception ex) {
+            em.getTransaction().rollback();
+
+        } finally {
+            em.close();
         }
     }
 
-    /*    private void procesarPago(Tarjeta tarjeta) {
-        //llamamos a método de calcular el total
-        BigDecimal total = calcularTotalCarrito();
-        if (tarjeta.getSaldoTarjeta() >= total.doubleValue()) {
-
-            EntityManager em = emf.createEntityManager();
-            try {
-                em.getTransaction().begin();
-                HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
-
-                //comprobamos que el stock añadido al carrito sea inferior
-                //al stock del producto en cuestion
-                for (String claveProducto : productosCarrito.keySet()) {
-                    String[] partes = claveProducto.split(" - ");
-                    String nombreProducto = partes[0].trim();
-                    int cantidad = productosCarrito.get(claveProducto);
-
-                    TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
-                    query.setParameter("nombre", nombreProducto);
-                    Productos producto = query.getSingleResult();
-                    //si no hay suficiente
-                    if (producto.getStock() < cantidad) {
-                        JOptionPane.showMessageDialog(null, "No hay suficiente stock para el producto: " + nombreProducto);
-                        em.getTransaction().rollback();
-                        return;
-                    }
-                }
-                //si hay stock suficiente
-                //restamos el saldo a la tarjeta
-//                tarjeta.setSaldoTarjeta(tarjeta.getSaldoTarjeta() - total.doubleValue());
-
-                Tickets ticket = new Tickets();
-                ticket.setNumeroPedido(new Random().nextInt(1000));
-                ticket.setCodTransaccion("TRANS" + new Random().nextInt(999));
-                ticket.setFechaOperacion(new Date());
-                ticket.setHoraOperacion(new Date());
-                ticket.setImporteTotal(total);
-
-                Tpv aux = tpvjc.findTpv(1);
-                ticket.setIdTpv(aux);
-                //creamos el ticket
-                tjc.create(ticket);
-
-                boolean allItemsProcessed = true;
-                //actualizamos el stock y creamos detalle de tickets
-                for (String claveProducto : productosCarrito.keySet()) {
-                    String[] partes = claveProducto.split(" - ");
-                    String nombreProducto = partes[0].trim();
-                    int cantidad = productosCarrito.get(claveProducto);
-
-                    TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
-                    query.setParameter("nombre", nombreProducto);
-                    Productos producto = query.getSingleResult();
-
-                    producto.setStock(producto.getStock() - cantidad);
-                    //editamos el producto
-                    pjc.edit(producto);
-
-                    DetalleticketsPK detalleticketsPK = new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto());
-                    Detalletickets detalleticketExistente = dtjc.findDetalletickets(detalleticketsPK);
-
-//                    detalleticketsPK.setIdProducto(producto.getIdProducto());
-//                    detalleticketsPK.setIdTicket(ticket.getIdTicket());
-                    if (detalleticketExistente == null) {
-                        Detalletickets detalleticket = new Detalletickets();
-                        detalleticketExistente.setDetalleticketsPK(detalleticketsPK);
-                        detalleticketExistente.setCantidadProducto(cantidad);
-                        detalleticketExistente.setProductos(producto);
-                        detalleticketExistente.setTickets(ticket);
-                        //creamos el detalleticket
-                        dtjc.create(detalleticket);
-
-                    } else {
-                        detalleticketExistente.setCantidadProducto(detalleticketExistente.getCantidadProducto() + cantidad);
-                        dtjc.edit(detalleticketExistente);
-                    }
-
-                }
-
-                em.getTransaction().commit();
-
-                JOptionPane.showMessageDialog(this, "Pago realizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                //vaciamos el carrito después de pagar
-                VentanaCarrito.vaciarCarrito();
-                dispose();
-                generarArchivoTxt(ticket);
-            } catch (Exception e) {
-                if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-                JOptionPane.showMessageDialog(this, "Error al procesar el pago.", "Error", JOptionPane.ERROR_MESSAGE);
-            } finally {
-                em.close();
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Saldo insuficiente.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-     */
     //método en el que cogemos el total del carrito y lo calculamos
     private BigDecimal calcularTotalCarrito() {
         BigDecimal total = BigDecimal.ZERO;
@@ -519,60 +411,7 @@ public class VentanaPagar extends java.awt.Dialog {
 
     }
 
-    //método para generar un fichero txt por cada ticket generado correctamente
-    private void generarFicheroTxt(Detalletickets dt,Tickets ticket) {
-        tjc.findTickets(ticket.getIdTicket());
-        String detalleTicket = "";
-            detalleTicket += "================================\n";
-            detalleTicket += ""+ticket.getIdTpv()+"           \n";
-            detalleTicket += "Número de transacción: " + ticket.getCodTransaccion() + "\n";
-            detalleTicket += "================================\n";
-            detalleTicket += "          TICKET DE COMPRA       \n";
-            detalleTicket += "            Wok and Roll         \n";
-            detalleTicket += "================================\n";
-            detalleTicket += "ID del Pedido: " + ticket.getIdTicket() + "\n";
-            detalleTicket += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
-            detalleTicket += "Fecha de Emisión: " + Metodos.formatearFecha(ticket.getFechaOperacion()) + "\n";
-            detalleTicket += "Hora de Emisión: " + Metodos.formatearHora(ticket.getHoraOperacion()) + "\n";
-            detalleTicket += "================================\n";
-            detalleTicket += "Productos:\n";
-
-            BigDecimal totalSinIVA = BigDecimal.ZERO;
-            BigDecimal totalConIVA = BigDecimal.ZERO;
-
-            for (Detalletickets detalle : ticket.getDetalleticketsCollection()) {
-                Productos producto = detalle.getProductos();
-                BigDecimal precioSinIVA = producto.getPrecioSinIVA();
-                BigDecimal tipoIVA = Metodos.calcularTipoIVA(producto.getTipoIVA());
-                BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(tipoIVA));
-                detalleTicket += "- " + producto.getNombre()
-                        + " x " + detalle.getCantidadProducto()
-                        + " - " + String.format("%.2f", precioConIVA) + "€\n";
-                totalSinIVA = totalSinIVA.add(precioSinIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
-                totalConIVA = totalConIVA.add(precioConIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
-            }
-
-            detalleTicket += "================================\n";
-            detalleTicket += "Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n";
-            detalleTicket += "Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n";
-            detalleTicket += "================================\n";
-            
-        String directorio = "./tickets/";
-        String nombreFichero = directorio + "ticket_" + ticket.getIdTicket() + "_" + ticket.getCodTransaccion() + ".txt";
-        // Verificar y crear el directorio si no existe
-        File dir = new File(directorio);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreFichero))) {
-            writer.write(detalleTicket);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al generar el archivo TXT: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
+   
 
     private void jtfNumeroTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfNumeroTarjetaActionPerformed
         // TODO add your handling code here:

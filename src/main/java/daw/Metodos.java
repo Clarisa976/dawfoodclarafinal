@@ -7,6 +7,11 @@ package daw;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
+import models.Productos;
 
 /**
  *
@@ -35,5 +40,16 @@ public class Metodos {
                 return BigDecimal.ZERO;
         }
     }
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
 
+    public static Productos findProductoByName(String nombreProducto) {
+        EntityManager em = emf.createEntityManager();
+        try {
+            TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
+            query.setParameter("nombre", nombreProducto);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
 }
