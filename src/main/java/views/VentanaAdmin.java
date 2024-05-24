@@ -43,6 +43,7 @@ public class VentanaAdmin extends java.awt.Dialog {
         jPassField = new javax.swing.JPasswordField();
         jBtnAcceder = new javax.swing.JButton();
         jBtnVolver = new javax.swing.JButton();
+        jBtnMostrarOcultar = new javax.swing.JButton();
 
         setResizable(false);
         setTitle("Wok & Roll - Administrador");
@@ -85,6 +86,15 @@ public class VentanaAdmin extends java.awt.Dialog {
             }
         });
 
+        jBtnMostrarOcultar.setBackground(new java.awt.Color(51, 51, 51));
+        jBtnMostrarOcultar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ojito.png"))); // NOI18N
+        jBtnMostrarOcultar.setToolTipText("Pulsa para mostrar u ocultar la contraseña");
+        jBtnMostrarOcultar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnMostrarOcultarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -92,11 +102,13 @@ public class VentanaAdmin extends java.awt.Dialog {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jBtnMostrarOcultar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPassField, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jBtnVolver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jBtnAcceder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPassField)))
+                    .addComponent(jBtnAcceder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(40, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -105,13 +117,17 @@ public class VentanaAdmin extends java.awt.Dialog {
                 .addGap(20, 20, 20)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
-                .addComponent(jPassField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPassField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBtnMostrarOcultar, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addComponent(jBtnAcceder)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBtnVolver)
-                .addContainerGap(9, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBtnMostrarOcultar, jPassField});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -171,9 +187,23 @@ public class VentanaAdmin extends java.awt.Dialog {
         dispose();
     }//GEN-LAST:event_jBtnVolverActionPerformed
 
+    private void jBtnMostrarOcultarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnMostrarOcultarActionPerformed
+        // TODO add your handling code here:
+        //echochar() devuelve el valor del jpasswordfield
+        //\u0000 es el valor de char nulo que muestra los caracteres
+        if (jPassField.getEchoChar() != '\u0000') { //así la contraseña está visible
+            //se muestran
+            jPassField.setEchoChar((char) 0); //este método es el que hace visible el texto del jPasswordField
+        } else {
+            //ocultamos la contraseña
+            jPassField.setEchoChar('*');//por defecto es *
+        }
+    }//GEN-LAST:event_jBtnMostrarOcultarActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAcceder;
+    private javax.swing.JButton jBtnMostrarOcultar;
     private javax.swing.JButton jBtnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
