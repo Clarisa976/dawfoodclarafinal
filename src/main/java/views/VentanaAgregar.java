@@ -27,7 +27,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
     /**
      * Creates new form VentanaAgregar
      */
-    PanelPrincipal panelMain;
+    private PanelPrincipal panelMain;
 
     public VentanaAgregar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);

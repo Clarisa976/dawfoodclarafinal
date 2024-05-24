@@ -24,7 +24,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
      */
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private static final ProductosJpaController pjc = new ProductosJpaController(emf);
-    PanelPrincipal panelMain;
+    private PanelPrincipal panelMain;
 
     public VentanaAdministrador(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
