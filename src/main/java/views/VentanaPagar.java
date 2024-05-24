@@ -355,7 +355,7 @@ public class VentanaPagar extends java.awt.Dialog {
                 //creamos el ticket
                 tjc.create(ticket);
 
-                // Actualizamos el stock y creamos detalle de tickets
+                //actualizamos el stock y creamos detalle de tickets
                 for (String claveProducto : productosCarrito.keySet()) {
                     String[] partes = claveProducto.split(" - ");
                     String nombreProducto = partes[0].trim();
@@ -369,22 +369,16 @@ public class VentanaPagar extends java.awt.Dialog {
                     //editamos el producto
                     pjc.edit(producto);
 
-                    DetalleticketsPK detalleTicketsPK = new DetalleticketsPK(ticket.getIdTicket(),producto.getIdProducto());
-                    Detalletickets detalleTicket = dtjc.findDetalletickets(detalleTicketsPK);
-
-//                    if (detalleTicket == null) {
-                    detalleTicket = new Detalletickets();
-                    detalleTicket.setDetalleticketsPK(detalleTicketsPK);
+//                    DetalleticketsPK detalleTicketsPK = new DetalleticketsPK(ticket.getIdTicket(),producto.getIdProducto());
+                    Detalletickets detalleTicket = new Detalletickets();
+//                    detalleTicket.setDetalleticketsPK(new DetalleticketsPK());
+                    detalleTicket.setDetalleticketsPK(new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto()));
                     detalleTicket.setCantidadProducto(cantidad);
                     detalleTicket.setProductos(producto);
                     detalleTicket.setTickets(ticket);
                     //creamos el detalleticket
                     dtjc.create(detalleTicket);
-//                    } else {
-//                    //si el detalle del ticket ya existe lo editamos con la cantidad
-//                        detalleTicket.setCantidadProducto(detalleTicket.getCantidadProducto() + cantidad);
-//                        dtjc.edit(detalleTicket);
-//                    }
+
                 }
 
                 em.getTransaction().commit();
@@ -392,7 +386,6 @@ public class VentanaPagar extends java.awt.Dialog {
                 JOptionPane.showMessageDialog(this, "Pago realizado con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 //vaciamos el carrito después de pagar
                 VentanaCarrito.vaciarCarrito();
-//                generarFicheroTxt(ticket);
                 dispose();
             } catch (Exception e) {
                 if (em.getTransaction().isActive()) {
@@ -527,38 +520,22 @@ public class VentanaPagar extends java.awt.Dialog {
     }
 
     //método para generar un fichero txt por cada ticket generado correctamente
-    private void generarFicheroTxt(Tickets ticket) {
+    private void generarFicheroTxt(Detalletickets dt,Tickets ticket) {
         tjc.findTickets(ticket.getIdTicket());
-        if (ticket == null || ticket.getDetalleticketsCollection() == null
-                || ticket.getDetalleticketsCollection().isEmpty()) {
-            JOptionPane.showMessageDialog(null,
-                    "No hay datos de detalle de ticket disponibles"
-                    + " para generar el archivo.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String directorio = "./tickets/";
-        String nombreFichero = directorio + "ticket_" + ticket.getIdTicket() + "_" + ticket.getCodTransaccion() + ".txt";
-        // Verificar y crear el directorio si no existe
-        File dir = new File(directorio);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreFichero))) {
-            writer.write("================================\n");
-            writer.write("" + ticket.getIdTpv() + "           \n");
-            writer.write("Número de transacción: " + ticket.getCodTransaccion() + "\n");
-            writer.write("================================\n");
-            writer.write("          TICKET DE COMPRA       \n");
-            writer.write("            Wok and Roll         \n");
-            writer.write("================================\n");
-            writer.write("ID del Pedido: " + ticket.getIdTicket() + "\n");
-            writer.write("Número de Pedido: " + ticket.getNumeroPedido() + "\n");
-            writer.write("Fecha de Emisión: " + Metodos.formatearFecha(ticket.getFechaOperacion()) + "\n");
-            writer.write("Hora de Emisión: " + Metodos.formatearHora(ticket.getHoraOperacion()) + "\n");
-            writer.write("================================\n");
-            writer.write("Productos:\n");
+        String detalleTicket = "";
+            detalleTicket += "================================\n";
+            detalleTicket += ""+ticket.getIdTpv()+"           \n";
+            detalleTicket += "Número de transacción: " + ticket.getCodTransaccion() + "\n";
+            detalleTicket += "================================\n";
+            detalleTicket += "          TICKET DE COMPRA       \n";
+            detalleTicket += "            Wok and Roll         \n";
+            detalleTicket += "================================\n";
+            detalleTicket += "ID del Pedido: " + ticket.getIdTicket() + "\n";
+            detalleTicket += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
+            detalleTicket += "Fecha de Emisión: " + Metodos.formatearFecha(ticket.getFechaOperacion()) + "\n";
+            detalleTicket += "Hora de Emisión: " + Metodos.formatearHora(ticket.getHoraOperacion()) + "\n";
+            detalleTicket += "================================\n";
+            detalleTicket += "Productos:\n";
 
             BigDecimal totalSinIVA = BigDecimal.ZERO;
             BigDecimal totalConIVA = BigDecimal.ZERO;
@@ -568,17 +545,28 @@ public class VentanaPagar extends java.awt.Dialog {
                 BigDecimal precioSinIVA = producto.getPrecioSinIVA();
                 BigDecimal tipoIVA = Metodos.calcularTipoIVA(producto.getTipoIVA());
                 BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(tipoIVA));
-                writer.write("- " + producto.getNombre()
+                detalleTicket += "- " + producto.getNombre()
                         + " x " + detalle.getCantidadProducto()
-                        + " - " + String.format("%.2f", precioConIVA) + "€\n");
+                        + " - " + String.format("%.2f", precioConIVA) + "€\n";
                 totalSinIVA = totalSinIVA.add(precioSinIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
                 totalConIVA = totalConIVA.add(precioConIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
             }
 
-            writer.write("================================\n");
-            writer.write("Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n");
-            writer.write("Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n");
-            writer.write("================================\n");
+            detalleTicket += "================================\n";
+            detalleTicket += "Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n";
+            detalleTicket += "Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n";
+            detalleTicket += "================================\n";
+            
+        String directorio = "./tickets/";
+        String nombreFichero = directorio + "ticket_" + ticket.getIdTicket() + "_" + ticket.getCodTransaccion() + ".txt";
+        // Verificar y crear el directorio si no existe
+        File dir = new File(directorio);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nombreFichero))) {
+            writer.write(detalleTicket);
 
         } catch (IOException e) {
             e.printStackTrace();

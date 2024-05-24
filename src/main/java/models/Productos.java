@@ -34,11 +34,11 @@ import javax.persistence.Table;
     @NamedQuery(name = "Productos.findByPrecioSinIVA", query = "SELECT p FROM Productos p WHERE p.precioSinIVA = :precioSinIVA"),
     @NamedQuery(name = "Productos.findByTipoIVA", query = "SELECT p FROM Productos p WHERE p.tipoIVA = :tipoIVA"),
     //query para buscar por categorías
-    @NamedQuery(name = "Productos.findByCategoria", query = "SELECT p FORM Productos p WHERE p.idTipoProducto.nomCategoria = :nomCategoria"),
+    @NamedQuery(name = "Productos.findByCategoria", query = "SELECT p FROM Productos p WHERE p.idTipoProducto.nomCategoria = :nomCategoria"),
     @NamedQuery(name = "Productos.findByStock", query = "SELECT p FROM Productos p WHERE p.stock = :stock")})
 public class Productos implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    /*private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -48,6 +48,26 @@ public class Productos implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "precioSinIVA")
+    private BigDecimal precioSinIVA;
+    @Column(name = "tipoIVA")
+    private String tipoIVA;
+    @Column(name = "stock")
+    private Integer stock;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
+    private Collection<Detalletickets> detalleticketsCollection;
+    @JoinColumn(name = "IdTipoProducto", referencedColumnName = "IdTipoProducto")
+    @ManyToOne
+    private Tipoproducto idTipoProducto;*/
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "IdProducto")
+    private Integer idProducto;
+    @Basic(optional = false)
+    @Column(name = "nombre")
+    private String nombre;
     @Column(name = "precioSinIVA")
     private BigDecimal precioSinIVA;
     @Column(name = "tipoIVA")

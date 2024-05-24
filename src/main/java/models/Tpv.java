@@ -24,7 +24,7 @@ import javax.persistence.TemporalType;
  *
  * @author clara
  */
-@Entity
+/*@Entity
 @Table(name = "tpv")
 @NamedQueries({
     @NamedQuery(name = "Tpv.findAll", query = "SELECT t FROM Tpv t"),
@@ -53,8 +53,45 @@ public class Tpv implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date horaSistema;
     @OneToMany(mappedBy = "idTpv")
-    private Collection<Tickets> ticketsCollection;
+    private Collection<Tickets> ticketsCollection;*/
+@Entity
+@Table(name = "tpv")
+@NamedQueries({
+    @NamedQuery(name = "Tpv.findAll", query = "SELECT t FROM Tpv t"),
+    @NamedQuery(name = "Tpv.findByIdTpv", query = "SELECT t FROM Tpv t WHERE t.idTpv = :idTpv"),
+    @NamedQuery(name = "Tpv.findByPassAdministrador", query = "SELECT t FROM Tpv t WHERE t.passAdministrador = :passAdministrador"),
+    @NamedQuery(name = "Tpv.findByDireccion", query = "SELECT t FROM Tpv t WHERE t.direccion = :direccion"),
+    @NamedQuery(name = "Tpv.findByFechaSistema", query = "SELECT t FROM Tpv t WHERE t.fechaSistema = :fechaSistema"),
+    @NamedQuery(name = "Tpv.findByHoraSistema", query = "SELECT t FROM Tpv t WHERE t.horaSistema = :horaSistema")})
+public class Tpv implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "IdTpv")
+    private Integer idTpv;
+    
+    @Basic(optional = false)
+    @Column(name = "passAdministrador")
+    private String passAdministrador;
+    
+    @Column(name = "direccion")
+    private String direccion;
+    
+    @Column(name = "fechaSistema")
+    @Temporal(TemporalType.DATE)
+    private Date fechaSistema;
+    
+    @Column(name = "horaSistema")
+    @Temporal(TemporalType.TIME)
+    private Date horaSistema;
+    
+    @OneToMany(mappedBy = "idTpv")
+    private Collection<Tickets> ticketsCollection;
+    
+    
     public Tpv() {
     }
 

@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
-import daw.ModeloTablaProductos;
+import models.ModeloTablaProductos;
 import models.Productos;
 
 /**

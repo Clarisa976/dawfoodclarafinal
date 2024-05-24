@@ -40,7 +40,7 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "Tickets.findByImporteTotal", query = "SELECT t FROM Tickets t WHERE t.importeTotal = :importeTotal")})
 public class Tickets implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    /*private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -58,6 +58,30 @@ public class Tickets implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date horaOperacion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    @Column(name = "importeTotal")
+    private BigDecimal importeTotal;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tickets")
+    private Collection<Detalletickets> detalleticketsCollection;
+    @JoinColumn(name = "IdTpv", referencedColumnName = "IdTpv")
+    @ManyToOne
+    private Tpv idTpv;*/
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "IdTicket")
+    private Integer idTicket;
+    @Column(name = "numeroPedido")
+    private Integer numeroPedido;
+    @Basic(optional = false)
+    @Column(name = "codTransaccion")
+    private String codTransaccion;
+    @Column(name = "fechaOperacion")
+    @Temporal(TemporalType.DATE)
+    private Date fechaOperacion;
+    @Column(name = "horaOperacion")
+    @Temporal(TemporalType.TIME)
+    private Date horaOperacion;
     @Column(name = "importeTotal")
     private BigDecimal importeTotal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tickets")

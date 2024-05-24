@@ -30,7 +30,20 @@ import javax.persistence.Table;
     @NamedQuery(name = "Tipoproducto.findByNomCategoria", query = "SELECT t FROM Tipoproducto t WHERE t.nomCategoria = :nomCategoria")})
 public class Tipoproducto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    /*private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "IdTipoProducto")
+    private Integer idTipoProducto;
+    @Column(name = "nomTipoProducto")
+    private String nomTipoProducto;
+    @Basic(optional = false)
+    @Column(name = "nomCategoria")
+    private String nomCategoria;
+    @OneToMany(mappedBy = "idTipoProducto")
+    private Collection<Productos> productosCollection;*/
+     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)

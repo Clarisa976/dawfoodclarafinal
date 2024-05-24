@@ -7,8 +7,6 @@ package views;
 import controllers.TicketsJpaController;
 import daw.Metodos;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -28,7 +26,7 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private static final TicketsJpaController tjc = new TicketsJpaController(emf);
     private PanelPrincipal panelMain;
-    private Tickets ticket;
+    private final Tickets ticket;
 
     public VentanaDetallesTicket(PanelPrincipal parent, boolean modal, Tickets ticket) {
         super(parent, modal);

@@ -195,6 +195,8 @@ public class VentanaCarrito extends javax.swing.JDialog {
             return;
         }//sino lo está accedemos a la ventana de pago
         new VentanaPagar(panelMain, true).setVisible(true);
+        listModel.clear();
+        productosCarrito.clear();
     }//GEN-LAST:event_jBtnPagarActionPerformed
 
     private void jBtnVaciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVaciarActionPerformed

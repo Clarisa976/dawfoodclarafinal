@@ -1,17 +1,17 @@
 ================================
 models.Tpv[ idTpv=1 ]           
-Número de transacción: TRANS942
+Número de transacción: TRANS479
 ================================
           TICKET DE COMPRA       
             Wok and Roll         
 ================================
-ID del Pedido: 1
-Número de Pedido: 8790
+ID del Pedido: 7
+Número de Pedido: 4526
 Fecha de Emisión: 24/05/2024
-Hora de Emisión: 00:05:01
+Hora de Emisión: 09:22:38
 ================================
 Productos:
 ================================
-Importe Total sin IVA: 0,00€
-Importe Total con IVA: 0,00€
+Importe Total sin IVA: 0.00€
+Importe Total con IVA: 0.00€
 ================================
