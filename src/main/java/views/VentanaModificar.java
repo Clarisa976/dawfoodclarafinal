@@ -419,7 +419,7 @@ public class VentanaModificar extends javax.swing.JDialog {
     private void cargarDatosProducto() {
         EntityManager em = emf.createEntityManager();
         try {
-            Productos producto = em.find(Productos.class, idProducto);
+            Productos producto = pjc.findProductos(idProducto);
             if (producto != null) {
                 jtfIDProducto.setText(producto.getIdProducto().toString());
                 jtfNombreProducto.setText(producto.getNombre());

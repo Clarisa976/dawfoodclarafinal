@@ -4,6 +4,7 @@
  */
 package views;
 
+import controllers.TipoproductoJpaController;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,6 +25,8 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
      */
     private PanelPrincipal panelMain;
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
+
     public VentanaAdministrarCategorias(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -172,18 +175,19 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
             //modificamos el producto seleccionado
             //primero obtenemos el id del producto seleccionado
             int selectedRow = jTable1.getSelectedRow();
-            Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
+            Integer idTipoProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
             EntityManager em = emf.createEntityManager();
             try {
                 //verificamos si el producto está o no en un ticket
-                boolean productoEnTicket = em.createQuery("SELECT COUNT(d) FROM Detalletickets d WHERE d.detalleticketsPK.idProducto = :idProducto", Long.class)
-                .setParameter("idProducto", idProducto)
-                .getSingleResult() > 0;
+                boolean productoEnTicket = em.createQuery(
+                        "SELECT COUNT(d) FROM Detalletickets d WHERE d.productos.idTipoProducto.idTipoProducto = :idTipoProducto", Long.class)
+                        .setParameter("idTipoProducto", idTipoProducto)
+                        .getSingleResult() > 0;
                 //si está no se borra
                 if (productoEnTicket) {
                     JOptionPane.showMessageDialog(null, "La categoría no puede ser modificado porque está presente en un ticket.");
                 } else {
-//                    new VentanaModificarCategoria(panelMain, true, idProducto).setVisible(true);
+                    new VentanaModificarCategoria(panelMain, true, idTipoProducto).setVisible(true);
                     //                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
                 }
                 // Una vez termine la ejecución de la ventana
@@ -208,26 +212,27 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
             //borramos el producto seleccionado
             //primero obtenemos el id del producto seleccionado
             int selectedRow = jTable1.getSelectedRow();
-            Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
+            Integer idTipoProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
 
             EntityManager em = emf.createEntityManager();
             try {
                 //verificamos si el producto está o no en un ticket
-                boolean productoEnTicket = em.createQuery("SELECT COUNT(d) FROM Detalletickets d WHERE d.detalleticketsPK.idProducto = :idProducto", Long.class)
-                .setParameter("idProducto", idProducto)
-                .getSingleResult() > 0;
+                boolean productoEnTicket = em.createQuery(
+                        "SELECT COUNT(d) FROM Detalletickets d WHERE d.productos.idTipoProducto.idTipoProducto = :idTipoProducto", Long.class)
+                        .setParameter("idTipoProducto", idTipoProducto)
+                        .getSingleResult() > 0;
                 //si está no se borra
                 if (productoEnTicket) {
                     JOptionPane.showMessageDialog(null, "La categoría no puede ser modificado porque está presente en un ticket.");
                 } else {
                     //sino está lo eliminamos
                     em.getTransaction().begin();
-                    Productos producto = em.find(Productos.class, idProducto);
-                    if (producto != null) {
-                        em.remove(producto);
-                        em.getTransaction().commit();
-                        JOptionPane.showMessageDialog(null, "Categoría borrada exitosamente.");
-                    } 
+                    Tipoproducto tipoproducto = em.find(Tipoproducto.class, idTipoProducto);
+
+                    tpjc.destroy(idTipoProducto);
+                    em.getTransaction().commit();
+                    JOptionPane.showMessageDialog(null, "Categoría borrada exitosamente.");
+
                     // Una vez termine la ejecución
                     // Llamo a cargar de nuevo los datos en el jTable con los cambios
                     cargarDatosJTable();
@@ -252,7 +257,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_jBtnVolverActionPerformed
 
-     // Este método inserta los datos de la lista en el jtable
+    // Este método inserta los datos de la lista en el jtable
     private void cargarDatosJTable() {
 
         // Se crea el modelo de datos que contendrá el JTable

@@ -49,7 +49,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jBtnCategorias = new javax.swing.JButton();
+        jBtnSubcategorias = new javax.swing.JButton();
 
         setResizable(false);
         setTitle("Wok & Roll - Gestionar productos");
@@ -117,13 +117,13 @@ public class VentanaAdministrador extends java.awt.Dialog {
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Productos:");
 
-        jBtnCategorias.setBackground(new java.awt.Color(204, 255, 204));
-        jBtnCategorias.setForeground(new java.awt.Color(0, 0, 0));
-        jBtnCategorias.setText("CATEGORÍAS");
-        jBtnCategorias.setToolTipText("Accede a la sección de las categorías");
-        jBtnCategorias.addActionListener(new java.awt.event.ActionListener() {
+        jBtnSubcategorias.setBackground(new java.awt.Color(204, 255, 204));
+        jBtnSubcategorias.setForeground(new java.awt.Color(0, 0, 0));
+        jBtnSubcategorias.setText("SUBCATEGORÍAS");
+        jBtnSubcategorias.setToolTipText("Accede a la sección de las categorías");
+        jBtnSubcategorias.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnCategoriasActionPerformed(evt);
+                jBtnSubcategoriasActionPerformed(evt);
             }
         });
 
@@ -143,12 +143,12 @@ public class VentanaAdministrador extends java.awt.Dialog {
                                 .addComponent(jBtnBorrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jBtnModificar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jBtnAgregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jBtnCategorias)))
+                            .addComponent(jBtnSubcategorias)))
                     .addComponent(jLabel1))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnAgregar, jBtnBorrar, jBtnCategorias, jBtnModificar, jBtnVolver});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnAgregar, jBtnBorrar, jBtnModificar, jBtnSubcategorias, jBtnVolver});
 
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,7 +164,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
                         .addGap(18, 18, 18)
                         .addComponent(jBtnVolver)
                         .addGap(135, 135, 135)
-                        .addComponent(jBtnCategorias))
+                        .addComponent(jBtnSubcategorias))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(18, 18, 18)
@@ -266,9 +266,9 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 } else {
                     //sino está lo eliminamos
                     em.getTransaction().begin();
-                    Productos producto = em.find(Productos.class, idProducto);
+                    Productos producto = pjc.findProductos(idProducto);
                     if (producto != null) {
-                        em.remove(producto);
+                       pjc.destroy(idProducto);
                         em.getTransaction().commit();
                         JOptionPane.showMessageDialog(null, "Producto borrado exitosamente.");
                     } else {
@@ -293,10 +293,10 @@ public class VentanaAdministrador extends java.awt.Dialog {
         }
     }//GEN-LAST:event_jBtnBorrarActionPerformed
 
-    private void jBtnCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCategoriasActionPerformed
+    private void jBtnSubcategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSubcategoriasActionPerformed
         // TODO add your handling code here:
         new VentanaAdministrarCategorias(panelMain, true).setVisible(true);
-    }//GEN-LAST:event_jBtnCategoriasActionPerformed
+    }//GEN-LAST:event_jBtnSubcategoriasActionPerformed
 
     // Este método inserta los datos de la lista en el jtable
     private void cargarDatosJTable() {
@@ -353,8 +353,8 @@ public class VentanaAdministrador extends java.awt.Dialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAgregar;
     private javax.swing.JButton jBtnBorrar;
-    private javax.swing.JButton jBtnCategorias;
     private javax.swing.JButton jBtnModificar;
+    private javax.swing.JButton jBtnSubcategorias;
     private javax.swing.JButton jBtnVolver;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

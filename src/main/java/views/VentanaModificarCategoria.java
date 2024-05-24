@@ -5,28 +5,32 @@
 package views;
 
 import controllers.TipoproductoJpaController;
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
+import models.Productos;
 import models.Tipoproducto;
 
 /**
  *
  * @author clara
  */
-public class VentanaAgregarCategoria extends javax.swing.JDialog {
+public class VentanaModificarCategoria extends javax.swing.JDialog {
 
     /**
      * Creates new form VentanaAgregarCategoria
      */
     private PanelPrincipal panelMain;
+    private Integer idTipoProducto;
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
 
-    public VentanaAgregarCategoria(PanelPrincipal parent, boolean modal) {
+    public VentanaModificarCategoria(PanelPrincipal parent, boolean modal,Integer idTipoProducto) {
         super(parent, modal);
         initComponents();
-
+        this.idTipoProducto = idTipoProducto;
+        cargarDatosProducto();
         setLocationRelativeTo(panelMain);
     }
 
@@ -212,13 +216,13 @@ public class VentanaAgregarCategoria extends javax.swing.JDialog {
             return;
         }
 
-        //creamos y guardamos el nuevo tipoproducto
-        Tipoproducto nuevoTipoProducto = new Tipoproducto();
-        nuevoTipoProducto.setNomTipoProducto(nombre);
-        nuevoTipoProducto.setNomCategoria(categoria);
+        //modificamos y guardamos el nuevo tipoproducto
+        Tipoproducto tipoProductoModificado = tpjc.findTipoproducto(idTipoProducto);
+        tipoProductoModificado.setNomTipoProducto(nombre);
+        tipoProductoModificado.setNomCategoria(categoria);
 
         try {
-            tpjc.create(nuevoTipoProducto);
+            tpjc.edit(tipoProductoModificado);
             JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception e) {
@@ -229,6 +233,35 @@ public class VentanaAgregarCategoria extends javax.swing.JDialog {
     }//GEN-LAST:event_jbtnGuardarActionPerformed
 
 
+    //método para cargar los datos del producto seleccionado
+    private void cargarDatosProducto() {
+        EntityManager em = emf.createEntityManager();
+        try {
+            Tipoproducto producto = tpjc.findTipoproducto(idTipoProducto);
+            if (producto != null) {
+                jtfID.setText(producto.getIdTipoProducto().toString());
+                jtfNombre.setText(producto.getNomTipoProducto());
+                
+                
+                if (producto != null) {
+
+                    switch (producto.getNomCategoria()) {
+                         case "COMIDAS":
+                    jrbntComidas.setSelected(true);
+                    break;
+                case "BEBIDAS":
+                    jrbtnBebidas.setSelected(true);
+                    break;
+                case "POSTRES":
+                    jrbtnPostres.setSelected(true);
+                    break;
+                    }
+                }
+            }
+        } finally {
+            em.close();
+        }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGroupTipoCategorias;
     private javax.swing.JLabel jLabel1;

@@ -60,7 +60,7 @@
                                   <Component id="jBtnModificar" linkSize="1" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jBtnAgregar" linkSize="1" alignment="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="jBtnCategorias" linkSize="1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBtnSubcategorias" linkSize="1" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -83,7 +83,7 @@
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jBtnVolver" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="135" max="-2" attributes="0"/>
-                          <Component id="jBtnCategorias" min="-2" max="-2" attributes="0"/>
+                          <Component id="jBtnSubcategorias" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
@@ -186,7 +186,7 @@
             <Property name="text" type="java.lang.String" value="Productos:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JButton" name="jBtnCategorias">
+        <Component class="javax.swing.JButton" name="jBtnSubcategorias">
           <Properties>
             <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="cc" green="ff" red="cc" type="rgb"/>
@@ -194,11 +194,11 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="0" green="0" red="0" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="CATEGOR&#xcd;AS"/>
+            <Property name="text" type="java.lang.String" value="SUBCATEGOR&#xcd;AS"/>
             <Property name="toolTipText" type="java.lang.String" value="Accede a la secci&#xf3;n de las categor&#xed;as"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnCategoriasActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnSubcategoriasActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
