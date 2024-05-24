@@ -5,6 +5,7 @@
 package daw;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.EntityManager;
@@ -43,6 +44,12 @@ public class Metodos {
                 return BigDecimal.ZERO;
         }
     }
+    //método para calcular el precioConIVA
+    public static BigDecimal calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
+    BigDecimal iva = calcularTipoIVA(tipoIVA);
+    BigDecimal precioConIVA = precioSinIVA.add(precioSinIVA.multiply(iva));
+    return precioConIVA.setScale(2, RoundingMode.HALF_UP);
+}
 
     //método para formatear el iva y que salga de forma numérica
     public static String formateoIVA(String tipoIVA) {

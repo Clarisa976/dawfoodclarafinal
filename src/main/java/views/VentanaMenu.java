@@ -324,6 +324,7 @@ public class VentanaMenu extends javax.swing.JDialog {
 
                 //llamamos al jdialog del carrito y agrergamos el string anterior
                 VentanaCarrito.agregarProducto(nombreProducto,precioConIVA,cantidad);
+                cargarTablas();
                 
                 //después de agregar un producto al carrito reseteamos el jspinner
                 jSpinnerCantidad.setValue(0);
@@ -337,8 +338,9 @@ public class VentanaMenu extends javax.swing.JDialog {
 
     private void jBtnVerCarritoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnVerCarritoActionPerformed
         // TODO add your handling code here:
-        cargarTablas();
+        
         new VentanaCarrito(panelMain, true).setVisible(true);
+        cargarTablas();
     }//GEN-LAST:event_jBtnVerCarritoActionPerformed
 
     //método para cargar los datos en la tabla modificado para que se pueda
@@ -371,7 +373,7 @@ public class VentanaMenu extends javax.swing.JDialog {
                 fila[1] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getNomTipoProducto() : null;
                 fila[2] = producto.getPrecioSinIVA();
                 fila[3] = Metodos.formateoIVA(producto.getTipoIVA());
-                fila[4] = calcularPrecioConIVA(producto.getPrecioSinIVA(), producto.getTipoIVA());
+                fila[4] = Metodos.calcularPrecioConIVA(producto.getPrecioSinIVA(), producto.getTipoIVA());
                 fila[5] = producto.getStock();
 
                 modelo.addRow(fila);
@@ -388,23 +390,13 @@ public class VentanaMenu extends javax.swing.JDialog {
 
     //con este método cargaremos las tablas filtrando el tipo de la categoria y 
     //en que tabla iría
-    public void cargarTablas() {
+    private void cargarTablas() {
         cargarDatosJTable("COMIDAS", jTableComidas);
         cargarDatosJTable("BEBIDAS", jTableBebidas);
         cargarDatosJTable("POSTRES", jTablePostres);
     }
 
-    //método para calcular el precio con iva
-    private BigDecimal calcularPrecioConIVA(BigDecimal precioSinIVA, String tipoIVA) {
-        BigDecimal iva;
-        if ("IVA_DIEZ".equals(tipoIVA)) {
-            iva = new BigDecimal("0.10");
-        } else {
-            iva = new BigDecimal("0.21");
-        }
-        return precioSinIVA.add(precioSinIVA.multiply(iva)).setScale(2, BigDecimal.ROUND_HALF_UP);
-    }
-
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAgregarCarrito;
