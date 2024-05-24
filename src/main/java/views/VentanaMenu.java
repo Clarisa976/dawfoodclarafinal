@@ -4,6 +4,7 @@
  */
 package views;
 
+import daw.Metodos;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -369,7 +370,7 @@ public class VentanaMenu extends javax.swing.JDialog {
                 //añadimos el nombre del tipo de producto
                 fila[1] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getNomTipoProducto() : null;
                 fila[2] = producto.getPrecioSinIVA();
-                fila[3] = producto.getTipoIVA();
+                fila[3] = Metodos.formateoIVA(producto.getTipoIVA());
                 fila[4] = calcularPrecioConIVA(producto.getPrecioSinIVA(), producto.getTipoIVA());
                 fila[5] = producto.getStock();
 

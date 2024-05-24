@@ -5,6 +5,7 @@
 package views;
 
 import controllers.ProductosJpaController;
+import daw.Metodos;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -328,7 +329,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 fila[0] = producto.getIdProducto();
                 fila[1] = producto.getNombre();
                 fila[2] = producto.getPrecioSinIVA();
-                fila[3] = producto.getTipoIVA();
+                fila[3] = Metodos.formateoIVA(producto.getTipoIVA());
                 fila[4] = producto.getStock();
                 //mostramos el nombre del tipoProducto no un número feo
                 fila[5] = producto.getIdTipoProducto() != null ? producto.getIdTipoProducto().getNomTipoProducto() : null;
