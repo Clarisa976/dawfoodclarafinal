@@ -164,7 +164,7 @@ public class Tickets implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Tickets[ idTicket=" + idTicket + " ]";
+        return "[ " + idTicket + " ]";
     }
     
 }

@@ -297,6 +297,7 @@ public class VentanaPagar extends java.awt.Dialog {
             try {
                 realizarCompra();
                 JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                dispose();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error al procesar la compra: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -304,6 +305,8 @@ public class VentanaPagar extends java.awt.Dialog {
             JOptionPane.showMessageDialog(this, "Datos de tarjeta incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
+        
+        
 
     }//GEN-LAST:event_jBtnPagarActionPerformed
 
@@ -365,7 +368,7 @@ public class VentanaPagar extends java.awt.Dialog {
 
                 Productos producto = Metodos.findProductoByName(nombreProducto);
 
-                //creamos el detalleticket asigmandole la pk
+                //creamos el detalleticket asignandole la pk
                 DetalleticketsPK pk = new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto());
                 Detalletickets detalle = new Detalletickets(pk);
                 //lo vamos añadiendo a la lista de detalleticket
