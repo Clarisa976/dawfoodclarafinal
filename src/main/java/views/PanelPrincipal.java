@@ -37,7 +37,6 @@ public class PanelPrincipal extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jBtnComprar = new javax.swing.JButton();
         jBtnGestionar = new javax.swing.JButton();
-        jBtnConsultarTickets = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -60,21 +59,11 @@ public class PanelPrincipal extends javax.swing.JFrame {
 
         jBtnGestionar.setBackground(new java.awt.Color(204, 255, 204));
         jBtnGestionar.setForeground(new java.awt.Color(0, 0, 0));
-        jBtnGestionar.setText("GESTIONAR PRODUCTOS");
+        jBtnGestionar.setText("MANTENIMIENTO");
         jBtnGestionar.setToolTipText("Accede al área de administración");
         jBtnGestionar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnGestionarActionPerformed(evt);
-            }
-        });
-
-        jBtnConsultarTickets.setBackground(new java.awt.Color(204, 255, 204));
-        jBtnConsultarTickets.setForeground(new java.awt.Color(0, 0, 0));
-        jBtnConsultarTickets.setText("CONSULTAR TICKETS");
-        jBtnConsultarTickets.setToolTipText("Consulta las ventas realizadas");
-        jBtnConsultarTickets.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnConsultarTicketsActionPerformed(evt);
             }
         });
 
@@ -86,24 +75,20 @@ public class PanelPrincipal extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 614, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jBtnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBtnGestionar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(jBtnConsultarTickets, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(28, 28, 28))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(28, 28, 28))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBtnComprar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(89, 89, 89)
+                        .addComponent(jBtnGestionar, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(98, 98, 98))))
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jBtnComprar, jBtnConsultarTickets});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -114,12 +99,11 @@ public class PanelPrincipal extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnGestionar)
-                    .addComponent(jBtnComprar)
-                    .addComponent(jBtnConsultarTickets))
+                    .addComponent(jBtnComprar))
                 .addGap(25, 25, 25))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBtnComprar, jBtnConsultarTickets, jBtnGestionar});
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jBtnComprar, jBtnGestionar});
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -146,11 +130,6 @@ public class PanelPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         new VentanaCompras(this, true).setVisible(true);
     }//GEN-LAST:event_jBtnComprarActionPerformed
-
-    private void jBtnConsultarTicketsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConsultarTicketsActionPerformed
-        // TODO add your handling code here:
-        new VentanaConsultaVentas(this, true).setVisible(true);
-    }//GEN-LAST:event_jBtnConsultarTicketsActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,7 +168,6 @@ public class PanelPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnComprar;
-    private javax.swing.JButton jBtnConsultarTickets;
     private javax.swing.JButton jBtnGestionar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

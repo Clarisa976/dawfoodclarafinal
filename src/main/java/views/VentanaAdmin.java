@@ -139,7 +139,7 @@ public class VentanaAdmin extends java.awt.Dialog {
 
     private void jBtnAccederActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAccederActionPerformed
         // TODO add your handling code here:
-        new VentanaAdministrador(panelMain, true).setVisible(true);
+        new VentanaMantenimiento(panelMain, true).setVisible(true);
     }//GEN-LAST:event_jBtnAccederActionPerformed
 
     private void jPassFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPassFieldActionPerformed
