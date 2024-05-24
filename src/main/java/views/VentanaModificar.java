@@ -387,39 +387,6 @@ public class VentanaModificar extends javax.swing.JDialog {
                 "Error", JOptionPane.ERROR_MESSAGE);
     }
 
-//        EntityManager em = emf.createEntityManager();
-//        try {
-//            em.getTransaction().begin();
-//            
-//            //buscamos el producto que vamos a modificar
-//            Productos producto = em.find(Productos.class, idProducto);
-//            //le hacemos set a los campos
-//            producto.setNombre(nombre);
-//            producto.setPrecioSinIVA(precio);
-//            producto.setTipoIVA(tipoIVA);
-//            producto.setStock(stock);
-//            
-//            //buscamos el tipoProducto
-//            TypedQuery<Tipoproducto> query = em.createNamedQuery("Tipoproducto.findByNomTipoProducto", Tipoproducto.class);
-//            query.setParameter("nomTipoProducto", nomTipoProducto);
-//            Tipoproducto tipoProducto = query.getSingleResult();
-//            producto.setIdTipoProducto(tipoProducto);
-//
-//            em.persist(producto);
-//            em.getTransaction().commit();
-//
-//            JOptionPane.showMessageDialog(this, "Producto guardado.");
-//            this.dispose();
-//        } catch (Exception e) {
-//            em.getTransaction().rollback();
-//            e.printStackTrace();
-//            JOptionPane.showMessageDialog(this,
-//                    "Error al guardar el producto: " + e.getMessage(),
-//                    "Error", JOptionPane.ERROR_MESSAGE);
-//        } finally {
-//            em.close();
-//        }
-
     }//GEN-LAST:event_jBtnGuardarActionPerformed
 
     //método para cargar las distintas subcateogrías

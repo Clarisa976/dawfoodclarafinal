@@ -10,10 +10,6 @@ import controllers.TicketsJpaController;
 import controllers.TpvJpaController;
 import daw.Metodos;
 import daw.Tarjeta;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
@@ -25,16 +21,12 @@ import java.util.Map;
 import java.util.Random;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.swing.JOptionPane;
 import models.Detalletickets;
 import models.DetalleticketsPK;
 import models.Productos;
 import models.Tickets;
-import models.Tpv;
 
 /**
  *
@@ -51,7 +43,6 @@ public class VentanaPagar extends java.awt.Dialog {
     private static final DetalleticketsJpaController dtjc = new DetalleticketsJpaController(emf);
     private static final ProductosJpaController pjc = new ProductosJpaController(emf);
     private static final TpvJpaController tpvjc = new TpvJpaController(emf);
-    private static EntityManager em = emf.createEntityManager();
     private static final HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
 
     public VentanaPagar(PanelPrincipal parent, boolean modal) {
