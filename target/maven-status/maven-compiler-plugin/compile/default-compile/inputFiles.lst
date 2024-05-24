@@ -2,6 +2,7 @@ C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\j
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\controllers\TipoproductoJpaController.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\models\Productos.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaMenu.java
+C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\models\ModeloTablaCategorias.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaPagar.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaConsultaVentas.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\models\Detalletickets.java
@@ -14,6 +15,7 @@ C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\j
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\models\ModeloTablaProductosFiltrada.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaDetallesTicket.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaAdmin.java
+C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaAdministrarCategorias.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\controllers\TpvJpaController.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\models\Tpv.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaModificar.java
@@ -23,7 +25,6 @@ C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\j
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\controllers\exceptions\NonexistentEntityException.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaAdministrador.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\controllers\TicketsJpaController.java
-C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\daw\Dawfoodclarafinal.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\daw\Metodos.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaCompras.java
 C:\Users\Usagi\OneDrive\Documentos\NetBeansProjects\dawfoodclarafinal\src\main\java\views\VentanaMantenimiento.java
