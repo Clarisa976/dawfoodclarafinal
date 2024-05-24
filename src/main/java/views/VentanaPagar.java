@@ -296,8 +296,6 @@ public class VentanaPagar extends java.awt.Dialog {
             JOptionPane.showMessageDialog(this, "Datos de tarjeta incorrectos.", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-        
-        
 
     }//GEN-LAST:event_jBtnPagarActionPerformed
 
@@ -314,7 +312,7 @@ public class VentanaPagar extends java.awt.Dialog {
         return null; //tarjeta no encontrada
     }
 
-    private void realizarCompra() throws Exception {
+    private void realizarCompra() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -344,22 +342,14 @@ public class VentanaPagar extends java.awt.Dialog {
 
                 //calculamos cuanto sería el importe total y lo añadimos al ticket
                 importeTotal = importeTotal.add(producto.getPrecioSinIVA().multiply(new BigDecimal(cantidad)));
-            }
 
-            //hacemos el set del importe total
-            ticket.setImporteTotal(importeTotal);
-            //creamos el ticket
-            tjc.create(ticket);
+                //hacemos el set del importe total
+                ticket.setImporteTotal(importeTotal);
+                //creamos el ticket
+                tjc.create(ticket);
 
-            //volvemos a recorrer el map del carrito y creamos el detalle ticket
-            //sino insistimos en esto no funciona
-            for (Map.Entry<String, Integer> entry : productosCarrito.entrySet()) {
-                String nombreProducto = entry.getKey().split(" - ")[0];
-                int cantidad = entry.getValue();
-
-                Productos producto = Metodos.findProductoByName(nombreProducto);
-
-                //creamos el detalleticket asignandole la pk
+                //creamos el detalle ticket
+                //asignandole la pk
                 DetalleticketsPK pk = new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto());
                 Detalletickets detalle = new Detalletickets(pk);
                 //lo vamos añadiendo a la lista de detalleticket
@@ -371,7 +361,7 @@ public class VentanaPagar extends java.awt.Dialog {
                 producto.setStock(producto.getStock() - cantidad);
                 //editamos el producto
                 pjc.edit(producto);
-                
+
                 //creamos el detalleticket con el jpa de detalleticket
                 dtjc.create(detalle);
             }
@@ -405,7 +395,6 @@ public class VentanaPagar extends java.awt.Dialog {
 
     }
 
-   
 
     private void jtfNumeroTarjetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfNumeroTarjetaActionPerformed
         // TODO add your handling code here:
