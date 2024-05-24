@@ -369,7 +369,7 @@ public class VentanaPagar extends java.awt.Dialog {
                     //editamos el producto
                     pjc.edit(producto);
 
-                    DetalleticketsPK detalleTicketsPK = new DetalleticketsPK();
+                    DetalleticketsPK detalleTicketsPK = new DetalleticketsPK(ticket.getIdTicket(),producto.getIdProducto());
                     Detalletickets detalleTicket = dtjc.findDetalletickets(detalleTicketsPK);
 
 //                    if (detalleTicket == null) {
@@ -381,7 +381,7 @@ public class VentanaPagar extends java.awt.Dialog {
                     //creamos el detalleticket
                     dtjc.create(detalleTicket);
 //                    } else {
-                    //si el detalle del ticket ya existe lo editamos con la cantidad
+//                    //si el detalle del ticket ya existe lo editamos con la cantidad
 //                        detalleTicket.setCantidadProducto(detalleTicket.getCantidadProducto() + cantidad);
 //                        dtjc.edit(detalleTicket);
 //                    }

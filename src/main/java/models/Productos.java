@@ -33,12 +33,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "Productos.findByNombre", query = "SELECT p FROM Productos p WHERE p.nombre = :nombre"),
     @NamedQuery(name = "Productos.findByPrecioSinIVA", query = "SELECT p FROM Productos p WHERE p.precioSinIVA = :precioSinIVA"),
     @NamedQuery(name = "Productos.findByTipoIVA", query = "SELECT p FROM Productos p WHERE p.tipoIVA = :tipoIVA"),
-    @NamedQuery(name = "Productos.findByStock", query = "SELECT p FROM Productos p WHERE p.stock = :stock"),
-    //query para buscar por categoria
-    @NamedQuery(name = "Productos.findByCategoria", query = "SELECT p FROM Productos p WHERE p.idTipoProducto.nomCategoria = :nomCategoria")
-   
-})
-
+    //query para buscar por categorías
+    @NamedQuery(name = "Productos.findByCategoria", query = "SELECT p FORM Productos p WHERE p.idTipoProducto.nomCategoria = :nomCategoria"),
+    @NamedQuery(name = "Productos.findByStock", query = "SELECT p FROM Productos p WHERE p.stock = :stock")})
 public class Productos implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -155,5 +152,5 @@ public class Productos implements Serializable {
     public String toString() {
         return "models.Productos[ idProducto=" + idProducto + " ]";
     }
-
+    
 }

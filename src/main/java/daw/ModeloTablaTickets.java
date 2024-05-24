@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package models;
+package daw;
 
 import java.math.BigDecimal;
 import javax.swing.table.DefaultTableModel;
@@ -11,15 +11,15 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author clara
  */
-public class ModeloTablaProductosFiltrada extends DefaultTableModel {
+public class ModeloTablaTickets extends DefaultTableModel {
     // Para usar JTable hay que asociar al JTable un objeto de tipo 
     // DefaultTableModel que contenga las columnas correspondientes
 
-    public ModeloTablaProductosFiltrada() {
+    public ModeloTablaTickets() {
         // Se asignan los nombres de las columnas de la tabla
         // en función de los atributos que tiene la persona
-        String[] columnNames = {"NOMBRE","TIPO PRODUCTO", "PRECIO SIN IVA",
-            "TIPO DE IVA", "PRECIO CON IVA","STOCK"};
+        String[] columnNames = {"ID TICKET", "ID TPV", "Nº PEDIDO",
+            "Nº TRANSACCIÓN", "FECHA", "HORA","IMPORTE TOTAL"};
 
         // Se le indica al modelo el nombre de las columnas y cantidad
         this.setColumnIdentifiers(columnNames);

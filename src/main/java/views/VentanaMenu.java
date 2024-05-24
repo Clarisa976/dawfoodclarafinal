@@ -11,8 +11,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import models.ModeloTablaProductos;
-import models.ModeloTablaProductosFiltrada;
+import daw.ModeloTablaProductos;
+import daw.ModeloTablaProductosFiltrada;
 import models.Productos;
 
 /**
