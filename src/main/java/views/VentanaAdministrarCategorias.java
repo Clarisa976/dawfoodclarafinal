@@ -23,7 +23,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
      * Creates new form VentanaAdministrarCategorias
      */
     private PanelPrincipal panelMain;
-     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     public VentanaAdministrarCategorias(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -158,7 +158,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
 
     private void jBtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAgregarActionPerformed
         // TODO add your handling code here:
-        new VentanaAgregar(panelMain, true).setVisible(true);
+        new VentanaAgregarCategoria(panelMain, true).setVisible(true);
         // Una vez termine la ejecución de la ventana Agregar
         // Llamo a cargar de nuevo los datos en el jTable con los cambios
         cargarDatosJTable();
@@ -183,7 +183,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
                 if (productoEnTicket) {
                     JOptionPane.showMessageDialog(null, "La categoría no puede ser modificado porque está presente en un ticket.");
                 } else {
-                    new VentanaModificar(panelMain, true, idProducto).setVisible(true);
+//                    new VentanaModificarCategoria(panelMain, true, idProducto).setVisible(true);
                     //                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
                 }
                 // Una vez termine la ejecución de la ventana

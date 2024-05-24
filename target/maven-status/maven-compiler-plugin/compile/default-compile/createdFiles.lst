@@ -1,12 +1,15 @@
+views\VentanaAgregarCategoria.class
 views\VentanaMantenimiento$2.class
 models\ModeloTablaCategorias.class
 views\VentanaMantenimiento$1.class
 views\VentanaAdministrador$6.class
+views\VentanaAgregarCategoria$1.class
 views\VentanaMantenimiento.class
 views\VentanaMantenimiento$3.class
 views\VentanaAdministrarCategorias.class
 views\VentanaAdmin$5.class
 views\VentanaAdministrarCategorias$4.class
+views\VentanaAgregarCategoria$1$1.class
 views\VentanaAdministrarCategorias$1.class
 views\VentanaAdministrarCategorias$2.class
 views\VentanaAdministrarCategorias$3.class
