@@ -384,8 +384,9 @@ public class VentanaPagar extends java.awt.Dialog {
                 //de esta forma asociamos la lista con el ticket usando la colección
                 ticket.setDetalleticketsCollection(detalles);
             }
-            JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
             em.getTransaction().commit();
+            JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             em.getTransaction().rollback();
 
