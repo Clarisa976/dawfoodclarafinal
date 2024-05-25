@@ -126,7 +126,7 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
 
             String detalles = "";
             detalles += "================================\n";
-            detalles += ""+ticket.getIdTpv()+"           \n";
+            detalles += ""+ticket.getIdTpv().toString()+"           \n";
             detalles += "Número de transacción: " + ticket.getCodTransaccion() + "\n";
             detalles += "================================\n";
             detalles += "          TICKET DE COMPRA       \n";

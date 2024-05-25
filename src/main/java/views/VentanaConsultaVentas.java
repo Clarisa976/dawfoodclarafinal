@@ -165,7 +165,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
             // Añadir los datos al modelo de la tabla
             for (Tickets ticket : ticketsList) {
                 fila[0] = ticket.getIdTicket();
-                fila[1] = ticket.getIdTicket();
+                fila[1] = ticket.getIdTpv();
                 fila[2] = ticket.getNumeroPedido();
                 fila[3] = ticket.getCodTransaccion();
                 fila[4] = Metodos.formatearFecha(ticket.getFechaOperacion());

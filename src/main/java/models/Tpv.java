@@ -145,7 +145,7 @@ public class Tpv implements Serializable {
 
     @Override
     public String toString() {
-        return "models.Tpv[ idTpv=" + idTpv + " ]";
+        return " " + idTpv + " ";
     }
     
 }

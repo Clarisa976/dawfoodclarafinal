@@ -287,7 +287,7 @@ public class VentanaPagar extends java.awt.Dialog {
             // Si la tarjeta es válida, procedemos con la compra
             try {
                 realizarCompra();
-                JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+                
                 dispose();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error al procesar la compra: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -313,7 +313,7 @@ public class VentanaPagar extends java.awt.Dialog {
     }
 
     //método para realizar la compra
-    private void realizarCompra(){
+    private void realizarCompra() {
         EntityManager em = emf.createEntityManager();
         try {
             em.getTransaction().begin();
@@ -338,7 +338,12 @@ public class VentanaPagar extends java.awt.Dialog {
                 Productos producto = Metodos.findProductoByName(nombreProducto);
                 //si no hay stock suficiente salta la excepción
                 if (producto.getStock() < cantidad) {
-                    throw new Exception("No hay suficiente stock para el producto: " + nombreProducto);
+                    JOptionPane.showMessageDialog(null, "No hay "
+                            + "suficiente stock para el producto: " 
+                            + nombreProducto, "Stock insuficiente", 
+                            JOptionPane.ERROR_MESSAGE);
+                    em.getTransaction().rollback();
+                    return;
                 }
 
                 //calculamos cuanto sería el importe total y lo añadimos al ticket
@@ -351,7 +356,7 @@ public class VentanaPagar extends java.awt.Dialog {
             tjc.create(ticket);
 
             //volvemos a recorrer el map del carrito y creamos el detalle ticket
-            //sino insistimos en esto no funciona
+            //sino insistimos en esto no funciona correctamente
             for (Map.Entry<String, Integer> entry : productosCarrito.entrySet()) {
                 String nombreProducto = entry.getKey().split(" - ")[0];
                 int cantidad = entry.getValue();
@@ -365,7 +370,10 @@ public class VentanaPagar extends java.awt.Dialog {
                 detalle.setCantidadProducto(cantidad);
                 detalle.setProductos(producto);
                 detalle.setTickets(ticket);
-
+                
+                //añadimos a la lista el detalleticket
+                detalles.add(detalle);
+                
                 //actualizamos el stock del producto stock del producto
                 producto.setStock(producto.getStock() - cantidad);
                 //editamos el producto
@@ -373,8 +381,10 @@ public class VentanaPagar extends java.awt.Dialog {
 
                 //creamos el detalleticket con el jpa de detalleticket
                 dtjc.create(detalle);
+                //de esta forma asociamos la lista con el ticket usando la colección
+                ticket.setDetalleticketsCollection(detalles);
             }
-
+            JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             em.getTransaction().commit();
         } catch (Exception ex) {
             em.getTransaction().rollback();
