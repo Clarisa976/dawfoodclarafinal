@@ -125,18 +125,19 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
             tjc.findTickets(ticket.getIdTicket());
 
             String detalles = "";
-            detalles += "================================\n";
-            detalles += ""+ticket.getIdTpv().toString()+"           \n";
+            detalles += "============================================\n";
+            detalles += "\tTICKET DE COMPRA       \n";
+            detalles += "\tWok and Roll         \n";
+            detalles += "\t"+ticket.getIdTpv().getDireccion().toString()+"           \n";
+            detalles += "============================================\n";
+            detalles += "TPV: "+ticket.getIdTpv().toString()+"           \n";
             detalles += "Número de transacción: " + ticket.getCodTransaccion() + "\n";
-            detalles += "================================\n";
-            detalles += "          TICKET DE COMPRA       \n";
-            detalles += "            Wok and Roll         \n";
-            detalles += "================================\n";
+            detalles += "============================================\n";           
             detalles += "ID del Pedido: " + ticket.getIdTicket() + "\n";
             detalles += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
             detalles += "Fecha de Emisión: " + Metodos.formatearFecha(ticket.getFechaOperacion()) + "\n";
             detalles += "Hora de Emisión: " + Metodos.formatearHora(ticket.getHoraOperacion()) + "\n";
-            detalles += "================================\n";
+            detalles += "============================================\n";
             detalles += "Productos:\n";
 
             BigDecimal totalSinIVA = BigDecimal.ZERO;
@@ -154,10 +155,10 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
                 totalConIVA = totalConIVA.add(precioConIVA.multiply(new BigDecimal(detalle.getCantidadProducto())));
             }
 
-            detalles += "================================\n";
+            detalles += "============================================\n";
             detalles += "Importe Total sin IVA: " + String.format("%.2f", totalSinIVA) + "€\n";
             detalles += "Importe Total con IVA: " + String.format("%.2f", totalConIVA) + "€\n";
-            detalles += "================================\n";
+            detalles += "============================================\n";
 
             jtaDetallesTicket.setText(detalles);
         } finally {

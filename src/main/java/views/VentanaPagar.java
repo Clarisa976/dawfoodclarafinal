@@ -335,7 +335,7 @@ public class VentanaPagar extends java.awt.Dialog {
                 int cantidad = entry.getValue();
 
                 //namequery para buscar los productos por el nombre
-                Productos producto = Metodos.findProductoByName(nombreProducto);
+                Productos producto = pjc.findProductoByNombre(nombreProducto);
                 //si no hay stock suficiente salta la excepción
                 if (producto.getStock() < cantidad) {
                     JOptionPane.showMessageDialog(null, "No hay "
@@ -361,7 +361,7 @@ public class VentanaPagar extends java.awt.Dialog {
                 String nombreProducto = entry.getKey().split(" - ")[0];
                 int cantidad = entry.getValue();
 
-                Productos producto = Metodos.findProductoByName(nombreProducto);
+                Productos producto = pjc.findProductoByNombre(nombreProducto);
 
                 //creamos el detalleticket asignandole la pk
                 DetalleticketsPK pk = new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto());
@@ -386,7 +386,7 @@ public class VentanaPagar extends java.awt.Dialog {
             }
             
             em.getTransaction().commit();
-            JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Compra realizada con éxito.", "Wok & Roll", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             em.getTransaction().rollback();
 

@@ -13,6 +13,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import models.Productos;
+import models.Tipoproducto;
 
 /**
  *
@@ -60,18 +61,6 @@ public class Metodos {
         }
 
     }
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-
-    //método para hacer una namequery en el que se buscan los productos por nombre
-    //y obtenemos solo un resultado
-    public static Productos findProductoByName(String nombreProducto) {
-        EntityManager em = emf.createEntityManager();
-        try {
-            TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
-            query.setParameter("nombre", nombreProducto);
-            return query.getSingleResult();
-        } finally {
-            em.close();
-        }
-    }
+ 
+    
 }

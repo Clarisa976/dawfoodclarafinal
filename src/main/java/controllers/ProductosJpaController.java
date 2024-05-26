@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import models.Productos;
 
 /**
@@ -228,5 +229,16 @@ public class ProductosJpaController implements Serializable {
             em.close();
         }
     }
-    
+    //método para hacer una namequery en el que se buscan los productos por nombre
+    //y obtenemos solo un resultado
+    public  Productos findProductoByNombre(String nombreProducto) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Productos> query = em.createNamedQuery("Productos.findByNombre", Productos.class);
+            query.setParameter("nombre", nombreProducto);
+            return query.getSingleResult();
+        } finally {
+            em.close();
+        }
+    }
 }

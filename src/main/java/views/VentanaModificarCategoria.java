@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
-import models.Productos;
 import models.Tipoproducto;
 
 /**
@@ -26,7 +25,7 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
     private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
 
-    public VentanaModificarCategoria(PanelPrincipal parent, boolean modal,Integer idTipoProducto) {
+    public VentanaModificarCategoria(PanelPrincipal parent, boolean modal, Integer idTipoProducto) {
         super(parent, modal);
         initComponents();
         this.idTipoProducto = idTipoProducto;
@@ -218,12 +217,18 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
 
         //modificamos y guardamos el nuevo tipoproducto
         Tipoproducto tipoProductoModificado = tpjc.findTipoproducto(idTipoProducto);
+        //verificamos que el nombre del tipo producto que se modifica ya exista
+        Tipoproducto existente = tpjc.findTipoproductoByNombre(nombre);
+        if (existente != null && !existente.getIdTipoProducto().equals(idTipoProducto)) {
+            JOptionPane.showMessageDialog(this, "El nombre del tipo de producto ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
         tipoProductoModificado.setNomTipoProducto(nombre);
         tipoProductoModificado.setNomCategoria(categoria);
 
         try {
             tpjc.edit(tipoProductoModificado);
-            JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Wok & Roll - mantenimiento", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al agregar la categoría: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -231,7 +236,6 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
         }
 
     }//GEN-LAST:event_jbtnGuardarActionPerformed
-
 
     //método para cargar los datos del producto seleccionado
     private void cargarDatosProducto() {
@@ -241,20 +245,19 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
             if (producto != null) {
                 jtfID.setText(producto.getIdTipoProducto().toString());
                 jtfNombre.setText(producto.getNomTipoProducto());
-                
-                
+
                 if (producto != null) {
 
                     switch (producto.getNomCategoria()) {
-                         case "COMIDAS":
-                    jrbntComidas.setSelected(true);
-                    break;
-                case "BEBIDAS":
-                    jrbtnBebidas.setSelected(true);
-                    break;
-                case "POSTRES":
-                    jrbtnPostres.setSelected(true);
-                    break;
+                        case "COMIDAS":
+                            jrbntComidas.setSelected(true);
+                            break;
+                        case "BEBIDAS":
+                            jrbtnBebidas.setSelected(true);
+                            break;
+                        case "POSTRES":
+                            jrbtnPostres.setSelected(true);
+                            break;
                     }
                 }
             }
@@ -262,6 +265,8 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
             em.close();
         }
     }
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup btnGroupTipoCategorias;
     private javax.swing.JLabel jLabel1;

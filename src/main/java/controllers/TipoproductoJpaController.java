@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import models.Tipoproducto;
 
 /**
@@ -182,6 +184,20 @@ public class TipoproductoJpaController implements Serializable {
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+    //método para hacer una namequery en el que se buscan los tipoproductos por nombre
+    //y obtenemos solo un resultado
+    public Tipoproducto findTipoproductoByNombre(String nombre) {
+        EntityManager em = getEntityManager();
+        try {
+            TypedQuery<Tipoproducto> query = em.createNamedQuery("Tipoproducto.findByNomTipoProducto", Tipoproducto.class);
+            query.setParameter("nomTipoProducto", nombre);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         } finally {
             em.close();
         }
