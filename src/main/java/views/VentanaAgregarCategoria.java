@@ -219,7 +219,7 @@ public class VentanaAgregarCategoria extends javax.swing.JDialog {
 
         try {
             tpjc.create(nuevoTipoProducto);
-            JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Wok & Roll - mantenimiento", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error al agregar la categoría: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
