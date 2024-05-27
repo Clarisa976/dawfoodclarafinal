@@ -4,14 +4,10 @@
  */
 package views;
 
-import controllers.TipoproductoJpaController;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.ModeloTablaCategorias;
-import models.Productos;
 import models.Tipoproducto;
 
 /**
@@ -24,11 +20,10 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
      * Creates new form VentanaAdministrarCategorias
      */
     private PanelPrincipal panelMain;
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
 
     public VentanaAdministrarCategorias(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         cargarDatosJTable();
         setLocationRelativeTo(panelMain);
@@ -176,7 +171,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
             //primero obtenemos el id del producto seleccionado
             int selectedRow = jTable1.getSelectedRow();
             Integer idTipoProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = panelMain.emf.createEntityManager();
             try {
                 //verificamos si el producto está o no en un ticket
                 boolean productoEnTicket = em.createQuery(
@@ -214,7 +209,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
             int selectedRow = jTable1.getSelectedRow();
             Integer idTipoProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
 
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = panelMain.emf.createEntityManager();
             try {
                 //verificamos si el producto está o no en un ticket
                 boolean productoEnTicket = em.createQuery(
@@ -229,7 +224,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
                     em.getTransaction().begin();
                     Tipoproducto tipoproducto = em.find(Tipoproducto.class, idTipoProducto);
 
-                    tpjc.destroy(idTipoProducto);
+                    panelMain.tpjc.destroy(idTipoProducto);
                     em.getTransaction().commit();
                     JOptionPane.showMessageDialog(null, "Categoría borrada exitosamente.");
 
@@ -269,7 +264,7 @@ public class VentanaAdministrarCategorias extends javax.swing.JDialog {
         Object[] fila = new Object[modelo.getColumnCount()];
 
         //obtenemos los datos de la base de datos
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
 
         try {
             List<Tipoproducto> productosList = em.createNamedQuery("Tipoproducto.findAll", Tipoproducto.class

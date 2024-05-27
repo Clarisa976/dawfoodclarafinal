@@ -5,9 +5,6 @@
 package views;
 
 
-import controllers.TpvJpaController;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.Tpv;
 
@@ -20,12 +17,12 @@ public class VentanaAdmin extends java.awt.Dialog {
     /**
      * Creates new form VentanaAdmin
      */
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static TpvJpaController tjc = new TpvJpaController(emf);
+
     private PanelPrincipal panelMain;
 
     public VentanaAdmin(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         setLocationRelativeTo(panelMain);
     }
@@ -165,7 +162,7 @@ public class VentanaAdmin extends java.awt.Dialog {
 
 
         //contraseña almacenada en la base de datos
-        Tpv tpv = tjc.findTpv(1);
+        Tpv tpv = panelMain.tpvjc.findTpv(1);
         String passBD = tpv.getPassAdministrador();
         System.out.println(passBD);
 

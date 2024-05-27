@@ -12,7 +12,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import models.ModeloTablaProductos;
 import models.ModeloTablaProductosFiltrada;
 import models.Productos;
 
@@ -25,11 +24,11 @@ public class VentanaMenu extends javax.swing.JDialog {
     /**
      * Creates new form VentanaMenu
      */
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
     private PanelPrincipal panelMain;
 
     public VentanaMenu(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         cargarTablas();
         setLocationRelativeTo(panelMain);
@@ -357,7 +356,7 @@ public class VentanaMenu extends javax.swing.JDialog {
         Object[] fila = new Object[modelo.getColumnCount()];
 
         //obtenemos los datos de la base de datos
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
 
         try {
             //creamos la lista de productos buscando con una query que hemos creado

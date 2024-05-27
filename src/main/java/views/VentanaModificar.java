@@ -22,9 +22,6 @@ import models.Tipoproducto;
  */
 public class VentanaModificar extends javax.swing.JDialog {
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final ProductosJpaController pjc = new ProductosJpaController(emf);
-    private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
     /**
      * Creates new form VentanaAgregar
      */
@@ -33,6 +30,7 @@ public class VentanaModificar extends javax.swing.JDialog {
 
     public VentanaModificar(PanelPrincipal parent, boolean modal, Integer idProducto) {
         super(parent, modal);
+        this.panelMain = parent;
         this.idProducto = idProducto;
         initComponents();
         cargarTiposProducto();
@@ -355,12 +353,12 @@ public class VentanaModificar extends javax.swing.JDialog {
         }
         try {
         //buscamos el tipo de producto
-        TypedQuery<Tipoproducto> query = emf.createEntityManager().createNamedQuery("Tipoproducto.findByNomTipoProducto", Tipoproducto.class);
+        TypedQuery<Tipoproducto> query = panelMain.emf.createEntityManager().createNamedQuery("Tipoproducto.findByNomTipoProducto", Tipoproducto.class);
         query.setParameter("nomTipoProducto", nomTipoProducto);
         Tipoproducto tipoProducto = query.getSingleResult();
 
         //buscamos el producto a modificar
-        Productos producto = pjc.findProductos(idProducto);
+        Productos producto = panelMain.pjc.findProductos(idProducto);
         if (producto == null) {
             JOptionPane.showMessageDialog(this,
                     "Producto no encontrado.",
@@ -376,7 +374,7 @@ public class VentanaModificar extends javax.swing.JDialog {
         producto.setIdTipoProducto(tipoProducto);
 
         //se edita
-        pjc.edit(producto);
+        panelMain.pjc.edit(producto);
 
         JOptionPane.showMessageDialog(this, "Producto guardado.");
         this.dispose();
@@ -391,7 +389,7 @@ public class VentanaModificar extends javax.swing.JDialog {
 
     //método para cargar las distintas subcateogrías
     private void cargarTiposProducto() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
             TypedQuery<String> queryComidas = em.createQuery("SELECT t.nomTipoProducto FROM Tipoproducto t WHERE t.nomCategoria = 'COMIDAS'", String.class);
             List<String> tiposComidas = queryComidas.getResultList();
@@ -417,9 +415,9 @@ public class VentanaModificar extends javax.swing.JDialog {
 
     //método para cargar los datos del producto seleccionado
     private void cargarDatosProducto() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
-            Productos producto = pjc.findProductos(idProducto);
+            Productos producto = panelMain.pjc.findProductos(idProducto);
             if (producto != null) {
                 jtfIDProducto.setText(producto.getIdProducto().toString());
                 jtfNombreProducto.setText(producto.getNombre());

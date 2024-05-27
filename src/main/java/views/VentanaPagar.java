@@ -4,10 +4,7 @@
  */
 package views;
 
-import controllers.DetalleticketsJpaController;
-import controllers.ProductosJpaController;
-import controllers.TicketsJpaController;
-import controllers.TpvJpaController;
+
 import daw.Tarjeta;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,8 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.Detalletickets;
 import models.DetalleticketsPK;
@@ -37,15 +32,12 @@ public class VentanaPagar extends java.awt.Dialog {
      * Creates new form VentanaPagar
      */
     private PanelPrincipal panelMain;
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final TicketsJpaController tjc = new TicketsJpaController(emf);
-    private static final DetalleticketsJpaController dtjc = new DetalleticketsJpaController(emf);
-    private static final ProductosJpaController pjc = new ProductosJpaController(emf);
-    private static final TpvJpaController tpvjc = new TpvJpaController(emf);
+   
     private static final HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
 
     public VentanaPagar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         setLocationRelativeTo(panelMain);
     }
@@ -313,7 +305,7 @@ public class VentanaPagar extends java.awt.Dialog {
 
     //método para realizar la compra
     private void realizarCompra() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
             em.getTransaction().begin();
 
@@ -323,7 +315,7 @@ public class VentanaPagar extends java.awt.Dialog {
             ticket.setHoraOperacion(new Date());
             ticket.setNumeroPedido(new Random().nextInt(1, 10000));
             ticket.setCodTransaccion("TRANS" + new Random().nextInt(1, 999));
-            ticket.setIdTpv(tpvjc.findTpv(1));
+            ticket.setIdTpv(panelMain.tpvjc.findTpv(1));
             BigDecimal importeTotal = BigDecimal.ZERO;//no funciona si ponemos 0
 
             //verificamos el stock del producto elegido en el carrito
@@ -334,7 +326,7 @@ public class VentanaPagar extends java.awt.Dialog {
                 int cantidad = entry.getValue();
 
                 //namequery para buscar los productos por el nombre
-                Productos producto = pjc.findProductoByNombre(nombreProducto);
+                Productos producto = panelMain.pjc.findProductoByNombre(nombreProducto);
                 //si no hay stock suficiente salta la excepción
                 if (producto.getStock() < cantidad) {
                     JOptionPane.showMessageDialog(null, "No hay "
@@ -352,7 +344,7 @@ public class VentanaPagar extends java.awt.Dialog {
             //hacemos el set del importe total
             ticket.setImporteTotal(calcularTotalCarrito());
             //creamos el ticket
-            tjc.create(ticket);
+            panelMain.tjc.create(ticket);
 
             //volvemos a recorrer el map del carrito y creamos el detalle ticket
             //sino insistimos en esto no funciona correctamente
@@ -360,7 +352,7 @@ public class VentanaPagar extends java.awt.Dialog {
                 String nombreProducto = entry.getKey().split(" - ")[0];
                 int cantidad = entry.getValue();
 
-                Productos producto = pjc.findProductoByNombre(nombreProducto);
+                Productos producto = panelMain.pjc.findProductoByNombre(nombreProducto);
 
                 //creamos el detalleticket asignandole la pk
                 DetalleticketsPK pk = new DetalleticketsPK(ticket.getIdTicket(), producto.getIdProducto());
@@ -376,10 +368,10 @@ public class VentanaPagar extends java.awt.Dialog {
                 //actualizamos el stock del producto stock del producto
                 producto.setStock(producto.getStock() - cantidad);
                 //editamos el producto
-                pjc.edit(producto);
+                panelMain.pjc.edit(producto);
 
                 //creamos el detalleticket con el jpa de detalleticket
-                dtjc.create(detalle);
+                panelMain.dtjc.create(detalle);
                 //de esta forma asociamos la lista con el ticket usando la colección
                 ticket.setDetalleticketsCollection(detalles);
             }
@@ -397,7 +389,6 @@ public class VentanaPagar extends java.awt.Dialog {
     //método en el que cogemos el total del carrito y lo calculamos
     private BigDecimal calcularTotalCarrito() {
         BigDecimal total = BigDecimal.ZERO;
-        HashMap<String, Integer> productosCarrito = VentanaCarrito.getProductosCarrito();
 
         for (String claveProducto : productosCarrito.keySet()) {
             String[] partes = claveProducto.split(" - Precio unitario: ");

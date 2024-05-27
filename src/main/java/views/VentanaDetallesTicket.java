@@ -4,12 +4,10 @@
  */
 package views;
 
-import controllers.TicketsJpaController;
+
 import daw.Metodos;
 import java.math.BigDecimal;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import models.Detalletickets;
 import models.Productos;
 import models.Tickets;
@@ -23,14 +21,13 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
     /**
      * Creates new form VentanaDetallesTicket
      */
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final TicketsJpaController tjc = new TicketsJpaController(emf);
     private PanelPrincipal panelMain;
     private final Tickets ticket;
 
     public VentanaDetallesTicket(PanelPrincipal parent, boolean modal, Tickets ticket) {
         super(parent, modal);
         initComponents();
+        this.panelMain = parent;
         this.ticket = ticket;
         //cargar los datos del ticket
         mostrarDatosTicket();
@@ -120,24 +117,24 @@ public class VentanaDetallesTicket extends java.awt.Dialog {
      */
     //método para cargar los datos del ticket
     private void mostrarDatosTicket() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
-            tjc.findTickets(ticket.getIdTicket());
+            panelMain.tjc.findTickets(ticket.getIdTicket());
 
             String detalles = "";
             detalles += "================================\n";
             detalles += "\tTICKET DE COMPRA       \n";
             detalles += "\tWok and Roll         \n";
-            detalles += "\t"+ticket.getIdTpv().getDireccion()+"           \n";
-           detalles += "================================\n";
-            detalles += "TPV: "+ticket.getIdTpv().toString()+"           \n";
+            detalles += "\t" + ticket.getIdTpv().getDireccion() + "           \n";
+            detalles += "================================\n";
+            detalles += "TPV: " + ticket.getIdTpv().toString() + "           \n";
             detalles += "Número de transacción: " + ticket.getCodTransaccion() + "\n";
-            detalles += "================================\n";        
+            detalles += "================================\n";
             detalles += "ID del Pedido: " + ticket.getIdTicket() + "\n";
             detalles += "Número de Pedido: " + ticket.getNumeroPedido() + "\n";
             detalles += "Fecha de Emisión: " + Metodos.formatearFecha(ticket.getFechaOperacion()) + "\n";
             detalles += "Hora de Emisión: " + Metodos.formatearHora(ticket.getHoraOperacion()) + "\n";
-           detalles += "================================\n";
+            detalles += "================================\n";
             detalles += "Productos:\n";
 
             BigDecimal totalSinIVA = BigDecimal.ZERO;

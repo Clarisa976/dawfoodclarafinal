@@ -4,12 +4,10 @@
  */
 package views;
 
-import controllers.TicketsJpaController;
+
 import daw.Metodos;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.ModeloTablaTickets;
 import models.Tickets;
@@ -23,12 +21,11 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
     /**
      * Creates new form VentanaConsultaVentas
      */
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final TicketsJpaController tjc = new TicketsJpaController(emf);
     private PanelPrincipal panelMain;
 
     public VentanaConsultaVentas(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         cargarDatosJTable();
         setLocationRelativeTo(panelMain);
@@ -149,7 +146,7 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         Object[] fila = new Object[modelo.getColumnCount()];
 
         //obtenemos los datos de la base de datos
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
 
         try {
             List<Tickets> ticketsList = em.createNamedQuery("Tickets.findAll", Tickets.class
@@ -210,9 +207,9 @@ public class VentanaConsultaVentas extends java.awt.Dialog {
         if (selectedRow >= 0) {
             Integer idTicket = (Integer) jTable1.getValueAt(selectedRow, 0);
 
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = panelMain.emf.createEntityManager();
             try {
-                Tickets ticket = tjc.findTickets(idTicket);
+                Tickets ticket = panelMain.tjc.findTickets(idTicket);
                 if (ticket != null) {
                     new VentanaDetallesTicket(panelMain, true, ticket).setVisible(true);
                 } else {

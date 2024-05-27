@@ -20,11 +20,10 @@ public class VentanaAgregarCategoria extends javax.swing.JDialog {
      * Creates new form VentanaAgregarCategoria
      */
     private PanelPrincipal panelMain;
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
 
     public VentanaAgregarCategoria(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
 
         setLocationRelativeTo(panelMain);
@@ -218,7 +217,7 @@ public class VentanaAgregarCategoria extends javax.swing.JDialog {
         nuevoTipoProducto.setNomCategoria(categoria);
 
         try {
-            tpjc.create(nuevoTipoProducto);
+            panelMain.tpjc.create(nuevoTipoProducto);
             JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Wok & Roll - mantenimiento", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception e) {

@@ -4,12 +4,9 @@
  */
 package views;
 
-import controllers.ProductosJpaController;
 import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.swing.JOptionPane;
 import models.Productos;
@@ -21,9 +18,6 @@ import models.Tipoproducto;
  */
 public class VentanaAgregar extends javax.swing.JDialog {
 
-    private static EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static ProductosJpaController pjc = new ProductosJpaController(emf);
-
     /**
      * Creates new form VentanaAgregar
      */
@@ -31,6 +25,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
 
     public VentanaAgregar(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         cargarTiposProducto();
         setLocationRelativeTo(panelMain);
@@ -349,23 +344,23 @@ public class VentanaAgregar extends javax.swing.JDialog {
             return;
         }
 
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
             em.getTransaction().begin();
 
             TypedQuery<Tipoproducto> query = em.createNamedQuery("Tipoproducto.findByNomTipoProducto", Tipoproducto.class);
             query.setParameter("nomTipoProducto", nomTipoProducto);
             List<Tipoproducto> tipoProductoList = query.getResultList();
-            
-            if (tipoProductoList.isEmpty()) {
-            JOptionPane.showMessageDialog(this,
-                    "No se encontró un tipo de producto con el nombre especificado.",
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            em.getTransaction().rollback();
-            return;
-        }
 
-        Tipoproducto tipoProducto = tipoProductoList.get(0);
+            if (tipoProductoList.isEmpty()) {
+                JOptionPane.showMessageDialog(this,
+                        "No se encontró un tipo de producto con el nombre especificado.",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                em.getTransaction().rollback();
+                return;
+            }
+
+            Tipoproducto tipoProducto = tipoProductoList.get(0);
 
             Productos producto = new Productos();
             producto.setNombre(nombre);
@@ -374,8 +369,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
             producto.setStock(stock);
             producto.setIdTipoProducto(tipoProducto);
 
-            pjc.create(producto);
-//            em.persist(producto);
+            panelMain.pjc.create(producto);
             em.getTransaction().commit();
 
             JOptionPane.showMessageDialog(this, "Producto guardado.");
@@ -394,7 +388,7 @@ public class VentanaAgregar extends javax.swing.JDialog {
 
     //método para cargar las distintas subcateogrías
     private void cargarTiposProducto() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
             TypedQuery<String> queryComidas = em.createQuery("SELECT t.nomTipoProducto FROM Tipoproducto t WHERE t.nomCategoria = 'COMIDAS'", String.class);
             List<String> tiposComidas = queryComidas.getResultList();

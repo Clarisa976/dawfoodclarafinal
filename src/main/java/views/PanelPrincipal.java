@@ -4,8 +4,15 @@
  */
 package views;
 
+import controllers.DetalleticketsJpaController;
+import controllers.ProductosJpaController;
+import controllers.TicketsJpaController;
+import controllers.TipoproductoJpaController;
+import controllers.TpvJpaController;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
 /**
  *
@@ -16,6 +23,13 @@ public class PanelPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form PanelPrincipal
      */
+    //entity manager de los distintos jpa
+    public static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
+    public static final TicketsJpaController tjc = new TicketsJpaController(emf);
+    public static final DetalleticketsJpaController dtjc = new DetalleticketsJpaController(emf);
+    public static final ProductosJpaController pjc = new ProductosJpaController(emf);
+    public static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
+    public static final TpvJpaController tpvjc = new TpvJpaController(emf);
     public PanelPrincipal() {
         initComponents();
         //obtenemos el tamaño de la pantalla para colocar la pantalla centrada

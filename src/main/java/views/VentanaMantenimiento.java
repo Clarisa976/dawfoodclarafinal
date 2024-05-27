@@ -16,6 +16,7 @@ public class VentanaMantenimiento extends javax.swing.JDialog {
     private PanelPrincipal panelMain;
     public VentanaMantenimiento(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         setLocationRelativeTo(panelMain);
     }

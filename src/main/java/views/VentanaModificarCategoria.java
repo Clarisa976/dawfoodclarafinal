@@ -4,10 +4,8 @@
  */
 package views;
 
-import controllers.TipoproductoJpaController;
+
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.Tipoproducto;
 
@@ -22,12 +20,11 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
      */
     private PanelPrincipal panelMain;
     private Integer idTipoProducto;
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final TipoproductoJpaController tpjc = new TipoproductoJpaController(emf);
 
     public VentanaModificarCategoria(PanelPrincipal parent, boolean modal, Integer idTipoProducto) {
         super(parent, modal);
         initComponents();
+        this.panelMain = parent;
         this.idTipoProducto = idTipoProducto;
         cargarDatosProducto();
         setLocationRelativeTo(panelMain);
@@ -216,9 +213,9 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
         }
 
         //modificamos y guardamos el nuevo tipoproducto
-        Tipoproducto tipoProductoModificado = tpjc.findTipoproducto(idTipoProducto);
+        Tipoproducto tipoProductoModificado = panelMain.tpjc.findTipoproducto(idTipoProducto);
         //verificamos que el nombre del tipo producto que se modifica ya exista
-        Tipoproducto existente = tpjc.findTipoproductoByNombre(nombre);
+        Tipoproducto existente = panelMain.tpjc.findTipoproductoByNombre(nombre);
         if (existente != null && !existente.getIdTipoProducto().equals(idTipoProducto)) {
             JOptionPane.showMessageDialog(this, "El nombre del tipo de producto ya existe.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -227,7 +224,7 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
         tipoProductoModificado.setNomCategoria(categoria);
 
         try {
-            tpjc.edit(tipoProductoModificado);
+            panelMain.tpjc.edit(tipoProductoModificado);
             JOptionPane.showMessageDialog(this, "Categoría agregada exitosamente.", "Wok & Roll - mantenimiento", JOptionPane.INFORMATION_MESSAGE);
             dispose();
         } catch (Exception e) {
@@ -239,9 +236,9 @@ public class VentanaModificarCategoria extends javax.swing.JDialog {
 
     //método para cargar los datos del producto seleccionado
     private void cargarDatosProducto() {
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
         try {
-            Tipoproducto producto = tpjc.findTipoproducto(idTipoProducto);
+            Tipoproducto producto = panelMain.tpjc.findTipoproducto(idTipoProducto);
             if (producto != null) {
                 jtfID.setText(producto.getIdTipoProducto().toString());
                 jtfNombre.setText(producto.getNomTipoProducto());

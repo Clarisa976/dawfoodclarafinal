@@ -4,12 +4,9 @@
  */
 package views;
 
-import controllers.ProductosJpaController;
 import daw.Metodos;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.swing.JOptionPane;
 import models.ModeloTablaProductos;
 import models.Productos;
@@ -23,12 +20,11 @@ public class VentanaAdministrador extends java.awt.Dialog {
     /**
      * Creates new form VentanaAdministrador
      */
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("daw_dawfoodclarafinal_jar_finalPU");
-    private static final ProductosJpaController pjc = new ProductosJpaController(emf);
     private PanelPrincipal panelMain;
 
     public VentanaAdministrador(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         cargarDatosJTable();
         setLocationRelativeTo(panelMain);
@@ -204,7 +200,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
             //primero obtenemos el id del producto seleccionado
             int selectedRow = jTable1.getSelectedRow();
             Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = panelMain.emf.createEntityManager();
             try {
                 //verificamos si el producto está o no en un ticket
                 boolean productoEnTicket = em.createQuery("SELECT COUNT(d) FROM Detalletickets d WHERE d.detalleticketsPK.idProducto = :idProducto", Long.class)
@@ -215,7 +211,6 @@ public class VentanaAdministrador extends java.awt.Dialog {
                     JOptionPane.showMessageDialog(null, "El producto no puede ser modificado porque está presente en un ticket.");
                 } else {
                 new VentanaModificar(panelMain, true, idProducto).setVisible(true);
-//                JOptionPane.showMessageDialog(null, "Producto modificado exitosamente.");
                 }
                 // Una vez termine la ejecución de la ventana
                 // Llamo a cargar de nuevo los datos en el jTable con los cambios
@@ -255,7 +250,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
             int selectedRow = jTable1.getSelectedRow();
             Integer idProducto = (Integer) jTable1.getValueAt(selectedRow, 0);
 
-            EntityManager em = emf.createEntityManager();
+            EntityManager em = panelMain.emf.createEntityManager();
             try {
                 //verificamos si el producto está o no en un ticket
                 boolean productoEnTicket = em.createQuery("SELECT COUNT(d) FROM Detalletickets d WHERE d.detalleticketsPK.idProducto = :idProducto", Long.class)
@@ -267,9 +262,9 @@ public class VentanaAdministrador extends java.awt.Dialog {
                 } else {
                     //sino está lo eliminamos
                     em.getTransaction().begin();
-                    Productos producto = pjc.findProductos(idProducto);
+                    Productos producto = panelMain.pjc.findProductos(idProducto);
                     if (producto != null) {
-                       pjc.destroy(idProducto);
+                       panelMain.pjc.destroy(idProducto);
                         em.getTransaction().commit();
                         JOptionPane.showMessageDialog(null, "Producto borrado exitosamente.");
                     } else {
@@ -311,7 +306,7 @@ public class VentanaAdministrador extends java.awt.Dialog {
         Object[] fila = new Object[modelo.getColumnCount()];
 
         //obtenemos los datos de la base de datos
-        EntityManager em = emf.createEntityManager();
+        EntityManager em = panelMain.emf.createEntityManager();
 
         try {
             List<Productos> productosList = em.createNamedQuery("Productos.findAll", Productos.class

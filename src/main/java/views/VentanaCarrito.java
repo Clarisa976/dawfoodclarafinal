@@ -26,6 +26,7 @@ public class VentanaCarrito extends javax.swing.JDialog {
 
     public VentanaCarrito(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         setLocationRelativeTo(panelMain);
     }

@@ -16,6 +16,7 @@ public class VentanaCompras extends javax.swing.JDialog {
     private PanelPrincipal panelMain;
     public VentanaCompras(PanelPrincipal parent, boolean modal) {
         super(parent, modal);
+        this.panelMain = parent;
         initComponents();
         
         setLocationRelativeTo(panelMain);
