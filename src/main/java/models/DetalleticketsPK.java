@@ -15,6 +15,7 @@ import javax.persistence.Embeddable;
  */
 @Embeddable
 public class DetalleticketsPK implements Serializable {
+    //esta clase sirve para guardar la pk de detalle tickets
 
     @Basic(optional = false)
     @Column(name = "IdTicket")

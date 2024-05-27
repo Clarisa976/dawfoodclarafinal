@@ -30,7 +30,7 @@ import javax.persistence.Table;
     @NamedQuery(name = "Tipoproducto.findByNomCategoria", query = "SELECT t FROM Tipoproducto t WHERE t.nomCategoria = :nomCategoria")})
 public class Tipoproducto implements Serializable {
 
-    /*private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -41,19 +41,9 @@ public class Tipoproducto implements Serializable {
     @Basic(optional = false)
     @Column(name = "nomCategoria")
     private String nomCategoria;
-    @OneToMany(mappedBy = "idTipoProducto")
-    private Collection<Productos> productosCollection;*/
-     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "IdTipoProducto")
-    private Integer idTipoProducto;
-    @Column(name = "nomTipoProducto")
-    private String nomTipoProducto;
-    @Basic(optional = false)
-    @Column(name = "nomCategoria")
-    private String nomCategoria;
+    /*nos encontramos con una relación unidireccional entre productos y tipoproductos
+    que se unen por la fk de productos, lo que permite acceder a estos tipos desde
+    la clase producto*/
     @OneToMany(mappedBy = "idTipoProducto")
     private Collection<Productos> productosCollection;
 

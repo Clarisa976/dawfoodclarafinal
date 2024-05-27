@@ -59,6 +59,8 @@ public class Tpv implements Serializable {
     @Temporal(TemporalType.TIME)
     private Date horaSistema;
     
+    /*se trata de una relación unidireccional, donde nos encontramos que un tpv
+    tiene varios tickets. En la parte de los tickets tendremos el tpv como fk*/    
     @OneToMany(mappedBy = "idTpv")
     private Collection<Tickets> ticketsCollection;
     

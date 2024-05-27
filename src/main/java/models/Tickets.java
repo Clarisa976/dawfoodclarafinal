@@ -60,6 +60,14 @@ public class Tickets implements Serializable {
     private Date horaOperacion;
     @Column(name = "importeTotal")
     private BigDecimal importeTotal;
+    /*por un lado tenemos la relación bidireccional de tickets a detalletickets,
+    ya que detalletickets sale de la relación de muchos a muchos entre 
+    tickets y producto.
+    por otro lado tenemos la relación unidireccional entre tickets y el tpv, 
+    ya que habrá varios tickets para un mismo tpv. Esto se guarda teniendo en el
+    ticket el tpv como fk y aquí lo vemos con un joincolumn con el tpv. 
+    En el programa lo podemos ver en el ticket que podemos acceder a datos del
+    tpv, como la dirección, solamente con el ticket*/
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tickets")
     private Collection<Detalletickets> detalleticketsCollection= new ArrayList<>();
     @JoinColumn(name = "IdTpv", referencedColumnName = "IdTpv")

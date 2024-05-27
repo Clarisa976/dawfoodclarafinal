@@ -8,7 +8,6 @@ import controllers.DetalleticketsJpaController;
 import controllers.ProductosJpaController;
 import controllers.TicketsJpaController;
 import controllers.TpvJpaController;
-import daw.Metodos;
 import daw.Tarjeta;
 import java.math.BigDecimal;
 import java.math.RoundingMode;

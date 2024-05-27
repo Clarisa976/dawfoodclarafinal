@@ -28,10 +28,19 @@ import javax.persistence.Table;
 public class Detalletickets implements Serializable {
 
     private static final long serialVersionUID = 1L;
-     @EmbeddedId
+    @EmbeddedId
     protected DetalleticketsPK detalleticketsPK;
     @Column(name = "cantidadProducto")
     private Integer cantidadProducto;
+    /*la clase detalletickets es el resultado de la reclación de muchos a mcuhos
+    entre tickets y productos. Por ello aqui encontramos dos relaciones unidireccionales
+    por un lado hacia tickets y por otro hacia productos, que son la pk de esta 
+    tabla.
+    en las clases de tickets y productos vemos que podemos crear colecciones del detalle tickets
+    
+    Al crear esta clase también se ha generado la clase detalletesticketespk que 
+    sirve simplemente para guardar la pk de detalles ticket.
+    */
     @JoinColumn(name = "IdProducto", referencedColumnName = "IdProducto", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private Productos productos;

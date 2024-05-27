@@ -38,27 +38,6 @@ import javax.persistence.Table;
     @NamedQuery(name = "Productos.findByStock", query = "SELECT p FROM Productos p WHERE p.stock = :stock")})
 public class Productos implements Serializable {
 
-    /*private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "IdProducto")
-    private Integer idProducto;
-    @Basic(optional = false)
-    @Column(name = "nombre")
-    private String nombre;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "precioSinIVA")
-    private BigDecimal precioSinIVA;
-    @Column(name = "tipoIVA")
-    private String tipoIVA;
-    @Column(name = "stock")
-    private Integer stock;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
-    private Collection<Detalletickets> detalleticketsCollection;
-    @JoinColumn(name = "IdTipoProducto", referencedColumnName = "IdTipoProducto")
-    @ManyToOne
-    private Tipoproducto idTipoProducto;*/
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -74,6 +53,14 @@ public class Productos implements Serializable {
     private String tipoIVA;
     @Column(name = "stock")
     private Integer stock;
+    /*por un lado tenemos una relación bidireccional con detalletickets,
+    ya que detalletickets sale de la relación de muchos a muchos entre 
+    tickets y producto.
+    Esto se guardará en una colección para que no de problemas a la hora de
+    generar los tickets.
+    Por otro lado tenemos la relación unidireccional entre productos y tipoproductos
+    que se unen entre si por la fk de productos que hay hay en la tabla de
+    tipoproductos.*/
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productos")
     private Collection<Detalletickets> detalleticketsCollection;
     @JoinColumn(name = "IdTipoProducto", referencedColumnName = "IdTipoProducto")
